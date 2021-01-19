@@ -34,11 +34,5 @@ namespace Tabloid_Fullstack.Repositories
             _context.Entry(tag).State = EntityState.Modified;
             _context.SaveChanges();
         }
-        public void Delete(int id)
-        {
-            var tag = GetById(id);
-            _context.Tag.Remove(tag);
-            _context.SaveChanges();
-        }
     }
 }

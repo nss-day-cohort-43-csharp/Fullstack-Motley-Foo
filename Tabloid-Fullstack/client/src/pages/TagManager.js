@@ -8,34 +8,20 @@ import {
 } from "reactstrap";
 import Tag from "../components/Tag";
 import { UserProfileContext } from "../providers/UserProfileProvider";
+import { TagContext } from "../providers/TagProvider"
 
 const TagManager = () => {
   const { getToken } = useContext(UserProfileContext);
-  const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
+  const { tags, getTags } = useContext(TagContext);
 
   useEffect(() => {
     getTags();
   }, []);
 
-  const getTags = () => {
-    // getToken().then((token) =>
-    fetch(`/api/tag`, {
-      method: "GET",
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    })
-      .then((res) => res.json())
-      .then((tags) => {
-        setTags(tags);
-      }
-        //)
-      );
-  };
-
   const saveNewTag = () => {
     const tagToAdd = { name: newTag };
+    tagToAdd.active = true;
     // getToken().then((token) =>
     fetch("/api/tag", {
       method: "POST",
@@ -64,11 +50,15 @@ const TagManager = () => {
       <div className="row justify-content-center">
         <div className="col-xs-12 col-sm-8 col-md-6">
           <ListGroup>
-            {tags.map((tag) => (
-              <ListGroupItem key={tag.id}>
-                <Tag tag={tag} />
-              </ListGroupItem>
-            ))}
+            {tags.map((tag) => {
+              if (tag.active === true) {
+                return (
+                  <ListGroupItem key={tag.id}>
+                    <Tag tag={tag} />
+                  </ListGroupItem>)
+              }
+            }
+            )}
           </ListGroup>
           <div className="my-4">
             <InputGroup>

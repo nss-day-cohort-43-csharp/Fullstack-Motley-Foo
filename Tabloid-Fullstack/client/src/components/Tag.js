@@ -16,7 +16,7 @@ const Tag = ({ tag }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [tagEdits, setTagEdits] = useState("");
-  const { editTag, deleteTag } = useContext(TagContext);
+  const { editTag, deactivateTag } = useContext(TagContext);
 
   const showEditForm = () => {
     setIsEditing(true);
@@ -31,6 +31,10 @@ const Tag = ({ tag }) => {
   const createEditTag = () => {
     tag.name = tagEdits;
   };
+
+  const createDeactiveTag = () => {
+    tag.active = 0;
+  }
 
   return (
     <div className="justify-content-between row">
@@ -79,7 +83,12 @@ const Tag = ({ tag }) => {
         </ModalBody>
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
-          <Button className="btn btn-outline-danger">Yes, Delete</Button>
+          <Button className="btn btn-outline-danger" onClick={(e) => {
+            createDeactiveTag();
+            deactivateTag(tag);
+            setPendingDelete(false);
+            Modal.isOpen = { pendingDelete }
+          }}>Yes, Delete</Button>
         </ModalFooter>
       </Modal>
     </div>

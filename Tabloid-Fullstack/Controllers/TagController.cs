@@ -65,12 +65,6 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _tagRepo.Delete(id);
-            return NoContent();
-        }
 
         private UserProfile GetCurrentUserProfile()
         {
