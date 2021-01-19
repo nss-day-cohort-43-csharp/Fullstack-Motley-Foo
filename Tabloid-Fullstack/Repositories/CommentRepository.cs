@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,11 @@ namespace Tabloid_Fullstack.Repositories
 
         public List<Comment> GetByPostId(int id)
         {
-            return _context.Comment.Where(c => c.PostId == id).OrderBy(c => c.CreateDateTime).ToList();
+            return _context.Comment
+                .Include(c => c.UserProfile)
+                .Where(c => c.PostId == id)
+                .OrderBy(c => c.CreateDateTime)
+                .ToList();
         }
 
         public void Add(Comment category)

@@ -31,7 +31,7 @@ const PostDetails = () => {
 
   if (!post) return null;
 
-  console.log(comments);
+  console.log('This is the array of comments for this post', comments);
 
   return (
     <div>
@@ -59,8 +59,8 @@ const PostDetails = () => {
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
+        <PostComments postComments={comments} />
       </div>
-      <PostComments postComments={comments} />
     </div>
   );
 };
