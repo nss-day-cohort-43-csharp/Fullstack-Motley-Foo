@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Jumbotron } from 'reactstrap';
+import PostComments from '../components/PostComments';
 import PostReactions from '../components/PostReactions';
 import formatDate from '../utils/dateFormatter';
 import './PostDetails.css';
@@ -58,10 +59,8 @@ const PostDetails = () => {
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
-        <div className="text-justify">
-          This is where are comment component will live
-        </div>
       </div>
+      <PostComments postComments={comments} />
     </div>
   );
 };
