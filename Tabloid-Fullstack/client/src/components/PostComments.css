@@ -1,0 +1,36 @@
+.date {
+  font-size: 11px;
+}
+
+.comment-text {
+  font-size: 12px;
+}
+.comment-subject {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.shadow-none {
+  box-shadow: none;
+}
+
+.name {
+  color: #d9534f;
+  text-align: left;
+}
+
+.cursor:hover {
+  color: blue;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.textarea {
+  resize: none;
+}
