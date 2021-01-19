@@ -1,0 +1,15 @@
+.new-post-form-area {
+    margin-top: 6em;
+    padding: 2em;
+    border: 2px solid;
+    width: 60%;
+}
+
+.newContent {
+    width: 30%;
+}
+
+.new-post-form-container {
+    display: flex;
+    justify-content: center;
+}
