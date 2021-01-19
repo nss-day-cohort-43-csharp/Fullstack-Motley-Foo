@@ -13,7 +13,8 @@ const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 
   const authLevel = () => {
-    if (isLoggedIn && isAdmin) {
+
+    if (isLoggedIn && isAdmin()) {
       return (
         <>
           <TagProvider>
@@ -22,10 +23,10 @@ const ApplicationViews = () => {
             </Route>
           </TagProvider>
         </>)
-    } else if (isLoggedIn && !isAdmin) {
-      return <Redirect to="/" />
+    } else if (isLoggedIn && !isAdmin()) {
+      return (<Redirect to="/" />)
     } else {
-      return <Redirect to="/login" />
+      return (<Redirect to="/login" />)
     }
   };
 
