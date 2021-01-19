@@ -1,66 +1,101 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Jumbotron } from "reactstrap";
-import PostReactions from "../components/PostReactions";
-import formatDate from "../utils/dateFormatter";
+import React, { useEffect, useState, useContext } from "react";
 import "./PostForm.css";
+import { UserProfileContext } from "../providers/UserProfileProvider";
+import { useHistory } from "react-router-dom";
 
 const PostForm = () => {
+    const [categories, setCategories] = useState([]);
+    const { getToken } = useContext(UserProfileContext);
+    const history = useHistory();
+
+    useEffect(() => {
+        getToken().then((token) =>
+            fetch(`/api/category`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            })
+                .then((res) => res.json())
+                .then((categories) => {
+                    setCategories(categories);
+                })
+        );
+    }, []);
+
+    const submitPost = (post) => {
+        getToken().then((token) => {
+            fetch(`/api/post`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(post)
+            })
+                .then(history.push("/"))
+        })
+    }
 
 
-    //   useEffect(() => {
-    //     fetch(`/api/post/${postId}`)
-    //       .then((res) => {
-    //         if (res.status === 404) {
-    //           toast.error("This isn't the post you're looking for");
-    //           return;
-    //         }
-    //         return res.json();
-    //       })
-    //       .then((data) => {
-    //         setPost(data.post);
-    //         setReactionCounts(data.reactionCounts);
-    //       });
-    //   }, []);
+    const newPost = {}
 
-    //if (!post) return null;
+    const handleControlledInputChange = (event) => {
+        newPost[event.target.id] = event.target.value
+    }
+
+    const handleClickSubmitPost = (event) => {
+        event.preventDefault()
+        const user = JSON.parse(localStorage.getItem('userProfile'));
+        newPost.userProfileId = user.id
+        newPost.categoryId = parseInt(newPost.categoryId)
+        newPost.isApproved = 1
+        submitPost(newPost)
+    }
 
     return (
-        <div className="new-post-form-container">
-            <section className="new-post-form-area">
-
-
-
+        <section className="new-post-form-container">
+            <div className="new-post-form-area">
                 <h2 className="new-post-form-title">Create A New Post</h2>
                 <form id="newPostForm">
-
                     <fieldset>
                         <div className="form-group">
-                            <label htmlFor="newTitle">Title</label>
-                            <input type="text" id="title" name="newTitle" />
+                            <label className="new-post-label" htmlFor="newTitle">Title</label>
+                            <input type="text" className="newTitle" id="title" name="newTitle" onChange={handleControlledInputChange} />
                         </div>
                     </fieldset>
-
                     <fieldset>
                         <div className="form-group">
-                            <label htmlFor="newImg">Image Location</label>
-                            <input type="text" id="imageLocation" name="newImg" />
+                            <label className="new-post-label" htmlFor="newImg">Image Location</label>
+                            <input type="text" className="newImg" id="imageLocation" name="newImg" onChange={handleControlledInputChange} />
                         </div>
                     </fieldset>
-
                     <fieldset>
                         <div className="form-group">
-                            <label htmlFor="newBody">Body</label>
-                            <textarea className="newContent" id="content" name="newBody" />
+                            <label className="new-post-label" htmlFor="newCategoryId">Category</label>
+                            <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={handleControlledInputChange}>
+                                {categories.map((category) => {
+                                    return <option key={category.id} value={category.id}>{category.name}</option>
+                                })}
+                            </select>
                         </div>
                     </fieldset>
+                    <fieldset>
+                        <div className="form-group">
+                            <label className="new-post-label" htmlFor="newPublishDateTime">Publishing Date</label>
+                            <input type="date" className="newPublishDataTime" id="publishDateTime" name="newCreateDateTime" onChange={handleControlledInputChange} />
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div className="form-group">
+                            <label className="new-post-label" htmlFor="newBody">Body</label>
+                            <textarea className="newBody" id="content" name="newBody" onChange={handleControlledInputChange} />
+                        </div>
+                    </fieldset>
+                    <button className="submitNewPostBtn" onClick={handleClickSubmitPost}> Submit Post </button>
                 </form>
-
-
-
-            </section>
-        </div>
+            </div>
+        </section>
     );
 };
 

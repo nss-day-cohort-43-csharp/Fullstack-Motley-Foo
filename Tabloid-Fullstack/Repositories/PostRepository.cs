@@ -58,5 +58,20 @@ namespace Tabloid_Fullstack.Repositories
                 })
                 .ToList();
         }
+
+        public void Add(Post post)
+        {
+            post.CreateDateTime = DateTime.Now;
+
+            if (post.PublishDateTime == null)
+            {
+                post.PublishDateTime = DateTime.Now;
+            }
+
+            _context.Add(post);
+            _context.SaveChanges();
+        }
+
+
     }
 }

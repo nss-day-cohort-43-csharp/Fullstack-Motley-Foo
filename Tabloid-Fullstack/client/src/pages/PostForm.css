@@ -1,15 +1,40 @@
+.new-post-form-container {
+    display: flex;
+    justify-content: center;
+}
+
 .new-post-form-area {
     margin-top: 6em;
     padding: 2em;
     border: 2px solid;
-    width: 60%;
+    width: 50%;
 }
 
-.newContent {
-    width: 30%;
+.new-post-form-title {
+    margin-bottom: 2em;
 }
 
-.new-post-form-container {
-    display: flex;
-    justify-content: center;
+
+.new-post-label {
+    float: left;
+    margin-left: 5em;
+    font-weight: 700;
+}
+
+.newBody, .newImg, .newTitle, .newCategoryId, .newPublishDataTime { 
+    float: right;
+    width: 70%;
+    margin-right: 5em;
+    margin-bottom: 2em;
+}
+
+.newBody{
+    height: 300px;
+}
+
+.submitNewPostBtn {
+    color: white;
+    background-color: black;
+    float: right;
+    margin-right: 5em;
 }

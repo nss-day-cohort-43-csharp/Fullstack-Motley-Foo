@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Models.ViewModels;
 using Tabloid_Fullstack.Repositories;
 
@@ -44,6 +45,13 @@ namespace Tabloid_Fullstack.Controllers
                 ReactionCounts = reactionCounts
             };
             return Ok(postDetails);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Post post)
+        {
+            _repo.Add(post);
+            return CreatedAtAction("Get", new { id = post.Id }, post);
         }
     }
 }

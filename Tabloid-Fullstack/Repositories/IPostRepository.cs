@@ -6,6 +6,7 @@ namespace Tabloid_Fullstack.Repositories
 {
     public interface IPostRepository
     {
+        void Add(Post post);
         List<PostSummary> Get();
         Post GetById(int id);
         List<ReactionCount> GetReactionCounts(int postId);
