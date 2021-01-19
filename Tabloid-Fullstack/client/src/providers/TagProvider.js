@@ -8,47 +8,48 @@ export function TagProvider(props) {
 
   const { getToken } = useContext(UserProfileContext);
   const [tags, setTags] = useState([]);
+
   const getTags = () => {
-    // getToken().then((token) =>
-    fetch(`/api/tag`, {
-      method: "GET",
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    })
-      .then((res) => res.json())
-      .then((tags) => {
-        setTags(tags);
-      }
-        //)
-      );
+    getToken().then((token) =>
+      fetch(`/api/tag`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((tags) => {
+          setTags(tags);
+        }
+        )
+    );
   };
 
   const editTag = (tag) => {
-    // getToken().then((token) =>
-    fetch(`${apiUrl}/${tag.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(tag),
-    }
-      //)
+    getToken().then((token) =>
+      fetch(`${apiUrl}/${tag.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(tag),
+      }
+      )
     ).then(getTags);
   };
 
   const deactivateTag = (tag) => {
-    // getToken().then((token) =>
-    fetch(`${apiUrl}/${tag.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(tag),
-    }).then(getTags)
-    //)
+    getToken().then((token) =>
+      fetch(`${apiUrl}/${tag.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(tag),
+      }).then(getTags)
+    )
   };
 
   return (

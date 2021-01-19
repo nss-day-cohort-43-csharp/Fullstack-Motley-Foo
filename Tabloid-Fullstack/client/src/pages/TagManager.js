@@ -22,19 +22,19 @@ const TagManager = () => {
   const saveNewTag = () => {
     const tagToAdd = { name: newTag };
     tagToAdd.active = true;
-    // getToken().then((token) =>
-    fetch("/api/tag", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(tagToAdd),
-    }).then(() => {
-      setNewTag("");
-      getTags();
-    }
-      //)
+    getToken().then((token) =>
+      fetch("/api/tag", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(tagToAdd),
+      }).then(() => {
+        setNewTag("");
+        getTags();
+      }
+      )
     );
   };
 

@@ -14,7 +14,7 @@ namespace Tabloid_Fullstack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TagController : ControllerBase
     {
         private ITagRepository _tagRepo;
@@ -29,12 +29,12 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            //var currentUser = GetCurrentUserProfile();
+            var currentUser = GetCurrentUserProfile();
 
-            //if (currentUser.UserTypeId != UserType.ADMIN_ID)
-            //{
-            //    return Unauthorized();
-            //}
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
 
             var tags = _tagRepo.Get();
             return Ok(tags);
@@ -43,12 +43,12 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Post(Tag tag)
         {
-            //var currentUser = GetCurrentUserProfile();
+            var currentUser = GetCurrentUserProfile();
 
-            //if (currentUser.UserTypeId != UserType.ADMIN_ID)
-            //{
-            //    return Unauthorized();
-            //}
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
 
             _tagRepo.Add(tag);
             return CreatedAtAction("Get", new { id = tag.Id }, tag);
