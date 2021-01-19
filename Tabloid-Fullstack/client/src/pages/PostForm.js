@@ -46,10 +46,15 @@ const PostForm = () => {
     const handleClickSubmitPost = (event) => {
         event.preventDefault()
         const user = JSON.parse(localStorage.getItem('userProfile'));
-        newPost.userProfileId = user.id
-        newPost.categoryId = parseInt(newPost.categoryId)
-        newPost.isApproved = 1
-        submitPost(newPost)
+        if (user == null) {
+            history.push("/login")
+        }
+        else {
+            newPost.userProfileId = user.id
+            newPost.categoryId = parseInt(newPost.categoryId)
+            newPost.isApproved = 1
+            submitPost(newPost)
+        }
     }
 
     return (
