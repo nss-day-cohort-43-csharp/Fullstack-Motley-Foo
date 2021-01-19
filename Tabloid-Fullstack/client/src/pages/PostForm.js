@@ -37,7 +37,6 @@ const PostForm = () => {
         })
     }
 
-
     const newPost = {}
 
     const handleControlledInputChange = (event) => {
