@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
+import TagManager from "../pages/TagManager"
 
 const ApplicationViews = () => {
   const { isLoggedIn } = useContext(UserProfileContext);
@@ -29,6 +30,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/register">
         <Register />
+      </Route>
+      <Route path="/tags">
+        <TagManager />
       </Route>
     </Switch>
   );
