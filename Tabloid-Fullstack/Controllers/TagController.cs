@@ -53,6 +53,24 @@ namespace Tabloid_Fullstack.Controllers
             _tagRepo.Add(tag);
             return CreatedAtAction("Get", new { id = tag.Id }, tag);
         }
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Tag tag)
+        {
+            if (id != tag.Id)
+            {
+                return BadRequest();
+            }
+
+            _tagRepo.Update(tag);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _tagRepo.Delete(id);
+            return NoContent();
+        }
 
         private UserProfile GetCurrentUserProfile()
         {

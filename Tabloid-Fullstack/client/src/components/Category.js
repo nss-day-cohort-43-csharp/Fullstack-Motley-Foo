@@ -32,7 +32,7 @@ const Category = ({ category }) => {
         <Form className="w-100">
           <InputGroup>
             <Input
-              size="sm"
+              bsSize="sm"
               onChange={(e) => setCategoryEdits(e.target.value)}
               value={categoryEdits}
             />
@@ -45,21 +45,21 @@ const Category = ({ category }) => {
           </InputGroup>
         </Form>
       ) : (
-        <>
-          <div className="p-1">{category.name}</div>
-          <ButtonGroup size="sm">
-            <Button className="btn btn-primary" onClick={showEditForm}>
-              Edit
+          <>
+            <div className="p-1">{category.name}</div>
+            <ButtonGroup size="sm">
+              <Button className="btn btn-primary" onClick={showEditForm}>
+                Edit
             </Button>
-            <Button
-              className="btn btn-danger"
-              onClick={(e) => setPendingDelete(true)}
-            >
-              Delete
+              <Button
+                className="btn btn-danger"
+                onClick={(e) => setPendingDelete(true)}
+              >
+                Delete
             </Button>
-          </ButtonGroup>
-        </>
-      )}
+            </ButtonGroup>
+          </>
+        )}
       {/* DELETE CONFIRM MODAL */}
       <Modal isOpen={pendingDelete}>
         <ModalHeader>Delele {category.name}?</ModalHeader>

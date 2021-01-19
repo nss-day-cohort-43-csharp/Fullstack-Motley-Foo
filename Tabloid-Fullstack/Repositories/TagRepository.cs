@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Data;
 using Tabloid_Fullstack.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tabloid_Fullstack.Repositories
 {
@@ -19,10 +20,24 @@ namespace Tabloid_Fullstack.Repositories
         {
             return _context.Tag.OrderBy(c => c.Name).ToList();
         }
-
+        public Tag GetById(int id)
+        {
+            return _context.Tag.FirstOrDefault(p => p.Id == id);
+        }
         public void Add(Tag tag)
         {
             _context.Add(tag);
+            _context.SaveChanges();
+        }
+        public void Update(Tag tag)
+        {
+            _context.Entry(tag).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+        public void Delete(int id)
+        {
+            var tag = GetById(id);
+            _context.Tag.Remove(tag);
             _context.SaveChanges();
         }
     }

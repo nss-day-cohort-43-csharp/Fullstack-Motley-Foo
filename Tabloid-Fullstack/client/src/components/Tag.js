@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   ButtonGroup,
@@ -10,11 +10,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { TagContext } from "../providers/TagProvider"
 
 const Tag = ({ tag }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [tagEdits, setTagEdits] = useState("");
+  const { editTag, deleteTag } = useContext(TagContext);
 
   const showEditForm = () => {
     setIsEditing(true);
@@ -26,18 +28,26 @@ const Tag = ({ tag }) => {
     setTagEdits("");
   };
 
+  const createEditTag = () => {
+    tag.name = tagEdits;
+  };
+
   return (
     <div className="justify-content-between row">
       {isEditing ? (
         <Form className="w-100">
           <InputGroup>
             <Input
-              size="sm"
+              bsSize="sm"
               onChange={(e) => setTagEdits(e.target.value)}
               value={tagEdits}
             />
             <ButtonGroup size="sm">
-              <Button onClick={showEditForm}>Save</Button>
+              <Button onClick={(e) => {
+                createEditTag();
+                editTag(tag)
+                hideEditForm()
+              }}>Save</Button>
               <Button outline color="danger" onClick={hideEditForm}>
                 Cancel
               </Button>
