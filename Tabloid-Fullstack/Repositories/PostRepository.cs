@@ -44,7 +44,7 @@ namespace Tabloid_Fullstack.Repositories
             return _context.Post
                 .Include(p => p.UserProfile)
                 .Include(p => p.Category)
-                .Where(p => p.Id == id)
+                .Where(p => p.Id == id&&p.IsApproved&&p.PublishDateTime<DateTime.Now)
                 .FirstOrDefault();
         }
 

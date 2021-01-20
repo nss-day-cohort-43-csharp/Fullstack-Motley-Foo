@@ -18,14 +18,16 @@ const PostDetails = () => {
       .then((res) => {
         if (res.status === 404) {
           toast.error("This isn't the post you're looking for");
-          return;
+            return;
         }
         return res.json();
       })
-      .then((data) => {
-        setPost(data.post);
-        setReactionCounts(data.reactionCounts);
-        setComments(data.comments);
+        .then((data) => {
+            if (data != undefined) {
+                setPost(data.post);
+                setReactionCounts(data.reactionCounts);
+                setComments(data.comments);
+            }
       });
   }, [postId]);
 
