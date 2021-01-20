@@ -6,8 +6,10 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
+import PostForm from "../pages/PostForm";
 import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
+import MyPosts from "../pages/MyPosts"
 import { PostTagProvider } from "../providers/PostTagProvider"
 
 const ApplicationViews = () => {
@@ -36,6 +38,9 @@ const ApplicationViews = () => {
       <Route path="/" exact>
         {isLoggedIn ? <p>Home</p> : <Redirect to="/login" />}
       </Route>
+      <Route path="/myposts">
+        {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
+      </Route>
       <Route path="/explore">
         {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
       </Route>
@@ -50,6 +55,9 @@ const ApplicationViews = () => {
 
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/newpost">
+        {isLoggedIn ? <PostForm /> : <Redirect to="/login" />}
       </Route>
       <Route path="/login">
         <Login />

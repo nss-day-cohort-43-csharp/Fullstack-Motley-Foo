@@ -13,6 +13,7 @@ import {
   Button,
 } from "reactstrap";
 import { UserProfileContext } from "../providers/UserProfileProvider"
+import { useHistory } from "react-router-dom";
 
 
 const PostDetails = () => {
@@ -26,6 +27,8 @@ const PostDetails = () => {
   const tagToSave = useRef(null);
 
   const currentUser = getCurrentUser();
+  const { getToken } = useContext(UserProfileContext);
+  const history = useHistory();
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -129,20 +132,68 @@ const PostDetails = () => {
         className="post-details__jumbo"
         style={{ backgroundImage: `url('${post.imageLocation}')` }}
       ></Jumbotron>
+  const deletePost = () => {
+    var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
+    if (r == true) {
+      getToken()
+        .then((token) => {
+          fetch(`../api/post/${postId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+            .then(history.push("/myposts"))
+        })
+    }
+  }
+
+  const ImageClip = () => {
+    if (post.imageLocation !== null) {
+      return (
+        <Jumbotron
+          className="post-details__jumbo"
+          style={{ backgroundImage: `url('${post.imageLocation}')` }}
+        ></Jumbotron>
+      )
+    }
+    else {
+      return (
+        <Jumbotron
+          className="post-details__jumbo"
+          style={{ backgroundImage: `url('https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg')` }}
+        ></Jumbotron>
+
+      )
+    }
+  }
+
+  const TrashCan = () => {
+    const user = JSON.parse(localStorage.getItem('userProfile'));
+    if (user.id === post.userProfileId) {
+      return (
+        <div className="delete-post-button" onClick={() => { deletePost() }}>🗑️</div>
+      )
+    }
+    else {
+      return null
+    }
+  }
+
+  return (
+    <div>
+      <ImageClip />
       <div className="container">
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
         <div className="row">
           <div className="col">
-            <img
-              src={post.userProfile.imageLocation}
-              alt={post.userProfile.displayName}
-              className="post-details__avatar rounded-circle"
-            />
             <p className="d-inline-block">{post.userProfile.displayName}</p>
           </div>
           <div className="col">
-            <p>{formatDate(post.publishDateTime)}</p>
+            <div>{formatDate(post.publishDateTime)}
+              <TrashCan />
+            </div>
           </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
