@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Models.ViewModels;
 using Tabloid_Fullstack.Repositories;
 
@@ -14,11 +16,13 @@ namespace Tabloid_Fullstack.Controllers
     {
 
         private IPostRepository _repo;
+        private IUserProfileRepository _userRepo;
         private ICommentRepository _commentRepo;
 
-        public PostController(IPostRepository repo, ICommentRepository commentRepo)
+        public PostController(IPostRepository repo, IUserProfileRepository userRepo, ICommentRepository commentRepo)
         {
             _repo = repo;
+            _userRepo = userRepo;
             _commentRepo = commentRepo;
         }
 
@@ -48,6 +52,46 @@ namespace Tabloid_Fullstack.Controllers
                 Comments = comments
             };
             return Ok(postDetails);
+        }
+
+        [HttpGet("getbyuser/{id}")]
+        public IActionResult GetByUser(int id)
+        {
+            var posts = _repo.GetByUserProfileId(id);
+            return Ok(posts);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Post post)
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            post.UserProfileId = currentUser.Id;
+
+            _repo.Add(post);
+            return CreatedAtAction("Get", new { id = post.Id }, post);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var user = GetCurrentUserProfile();
+            var postToDelete = _repo.GetById(id);
+
+            if (postToDelete.UserProfileId != user.Id)
+            {
+                return Unauthorized();
+            }           
+            
+            _repo.Delete(id);
+            return NoContent();
+        }
+
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

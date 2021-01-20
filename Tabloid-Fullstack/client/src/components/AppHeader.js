@@ -48,8 +48,19 @@ const AppHeader = () => {
             {user ? (
               <>
                 <NavItem>
+                  <NavLink to="/newpost" tag={Link}>
+                    <div className="create-new-post">New Post</div>
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
                   <NavLink to="/explore" tag={Link}>
                     Explore
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/myposts" tag={Link}>
+                    My Posts
                   </NavLink>
                 </NavItem>
                 {isAdmin() && (
