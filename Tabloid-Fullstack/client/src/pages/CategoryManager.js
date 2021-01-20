@@ -52,6 +52,7 @@ const CategoryManager = () => {
             })
         );
     };
+
     return (
     <>
         {admin?(

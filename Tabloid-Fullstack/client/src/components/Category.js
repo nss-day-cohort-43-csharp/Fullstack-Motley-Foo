@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserProfileContext } from "../providers/UserProfileProvider";
 import {
   Button,
   ButtonGroup,
@@ -14,7 +15,8 @@ import {
 const Category = ({ category }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
-  const [categoryEdits, setCategoryEdits] = useState("");
+    const [categoryEdits, setCategoryEdits] = useState("");
+    const { getToken} = useContext(UserProfileContext);
 
   const showEditForm = () => {
     setIsEditing(true);
@@ -24,7 +26,18 @@ const Category = ({ category }) => {
   const hideEditForm = () => {
     setIsEditing(false);
     setCategoryEdits("");
-  };
+    };
+
+    const deleteCategory = (id) => {
+        getToken().then((token) =>
+            fetch(`/api/category/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
+    };
 
   return (
     <div className="justify-content-between row">
@@ -68,8 +81,8 @@ const Category = ({ category }) => {
           undone.
         </ModalBody>
         <ModalFooter>
-          <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
-          <Button className="btn btn-outline-danger">Yes, Delete</Button>
+                  <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+                  <Button className="btn btn-outline-danger" onClick={() => deleteCategory(category.id)} > Yes, Delete</Button>
         </ModalFooter>
       </Modal>
     </div>
