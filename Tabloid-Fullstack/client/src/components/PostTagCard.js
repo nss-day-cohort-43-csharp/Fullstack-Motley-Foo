@@ -4,7 +4,7 @@ import { Card } from "reactstrap";
 
 const PostTagCard = ({ postTag }) => {
   return (
-    <div>{postTag.tag.Name} <button>x</button></div>
+    <div>{postTag.tag.name} <button>x</button></div>
   );
 };
 

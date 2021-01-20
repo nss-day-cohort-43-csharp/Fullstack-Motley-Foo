@@ -27,7 +27,7 @@ namespace Tabloid_Fullstack.Repositories
 
         public List<PostTag> GetByPostId(int id)
         {
-            return _context.PostTag.Where(pt => pt.Post.Id == id).ToList();
+            return _context.PostTag.Include(pt => pt.Tag).Where(pt => pt.Post.Id == id).ToList();
         }
 
         public void Delete(int id)
