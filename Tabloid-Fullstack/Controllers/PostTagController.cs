@@ -46,10 +46,10 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(postTags);
         }
         [HttpPost]
-        public IActionResult Post(PostTag postTag)
+        public IActionResult Post(int postId, int tagId)
         {
-            _postTagRepo.Add(postTag);
-            return CreatedAtAction("Get", new { id = postTag.Id }, postTag);
+            _postTagRepo.Add(postId, tagId);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
