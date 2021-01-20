@@ -33,7 +33,8 @@ const PostForm = () => {
                 },
                 body: JSON.stringify(post)
             })
-                .then(history.push("/"))
+                .then((res) => res.json())
+                .then((data) => history.push(`/post/${data.id}`))
         })
     }
 
@@ -50,7 +51,6 @@ const PostForm = () => {
             history.push("/login")
         }
         else {
-            newPost.userProfileId = user.id
             newPost.categoryId = parseInt(newPost.categoryId)
             newPost.isApproved = 1
             submitPost(newPost)

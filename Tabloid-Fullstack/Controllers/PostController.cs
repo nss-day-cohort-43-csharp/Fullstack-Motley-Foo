@@ -55,6 +55,8 @@ namespace Tabloid_Fullstack.Controllers
         {
             var currentUser = GetCurrentUserProfile();
 
+            post.UserProfileId = currentUser.Id;
+
             _repo.Add(post);
             return CreatedAtAction("Get", new { id = post.Id }, post);
         }
