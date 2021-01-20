@@ -38,3 +38,13 @@
     float: right;
     margin-right: 5em;
 }
+
+.create-new-post {
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: #5FC2AA;
+    color: white;
+    border-radius: 18px;
+    
+    
+}

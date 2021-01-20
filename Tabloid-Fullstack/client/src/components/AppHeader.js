@@ -49,7 +49,7 @@ const AppHeader = () => {
               <>
                 <NavItem>
                   <NavLink to="/newpost" tag={Link}>
-                    New Post
+                    <div className="create-new-post">New Post</div>
                   </NavLink>
                 </NavItem>
                 <NavItem>
