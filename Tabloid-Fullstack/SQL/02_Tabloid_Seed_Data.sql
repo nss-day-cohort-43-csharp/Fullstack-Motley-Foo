@@ -11,7 +11,7 @@ set identity_insert [Category] off
 
 set identity_insert [Tag] on
 insert into [Tag] ([Id], [Name])
-values (1, 'C#'), (2, 'JavaScript'), (3, 'Funny'), (4, 'Scary');
+values (1, 'C#', 1), (2, 'JavaScript', 1), (3, 'Funny', 1), (4, 'Scary', 1);
 set identity_insert [Tag] off
 
 set identity_insert [UserProfile] on
