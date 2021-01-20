@@ -32,7 +32,7 @@ const PostDetails = () => {
       .then((res) => {
         if (res.status === 404) {
           toast.error("This isn't the post you're looking for");
-          return;
+            return;
         }
         return res.json();
       })
