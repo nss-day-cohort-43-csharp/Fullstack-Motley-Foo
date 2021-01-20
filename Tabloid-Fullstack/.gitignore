@@ -365,6 +365,7 @@ FodyWeavers.xsd
 .env.local
 
 appsettings.Local.json
+
 .vs/Tabloid-Fullstack/v16/.suo
 .vs/
 
