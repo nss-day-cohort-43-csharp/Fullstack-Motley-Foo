@@ -69,8 +69,12 @@ namespace Tabloid_Fullstack.Controllers
         public IActionResult Delete(int id)
         {
             var user = GetCurrentUserProfile();
-            var postToDelete = GetById(id);
+            var postToDelete = _repo.GetById(id);
 
+            if (postToDelete.UserProfileId != user.Id)
+            {
+                return Unauthorized();
+            }           
             
             _repo.Delete(id);
             return NoContent();

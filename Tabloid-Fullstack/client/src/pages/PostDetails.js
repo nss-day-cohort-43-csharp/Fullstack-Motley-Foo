@@ -36,16 +36,31 @@ const PostDetails = () => {
   if (!post) return null;
 
   const deletePost = () => {
-    getToken()
-      .then((token) => {
-        fetch(`../api/post/${postId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+
+
+    var txt;
+    var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
+    if (r == true) {
+      getToken()
+        .then((token) => {
+          fetch(`../api/post/${postId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+            .then(history.push("/explore/"))
         })
-          .then(history.push("/explore/"))
-      })
+
+
+    } else {
+
+    }
+
+
+
+
+
 
   }
 
