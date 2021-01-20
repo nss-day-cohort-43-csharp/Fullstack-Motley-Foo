@@ -79,17 +79,38 @@ const PostDetails = () => {
         tagId
       }
       addPostTag(postTag);
+      tagToSave.current.value = "0";
     }
   }
 
+
+
   const userCheck = () => {
-    if (currentUser.id === post.userProfile.id) {
+    let empty = [];
+
+    let dropdownTags = [];
+    if (postTags) {
+      for (const obj of postTags) {
+        empty.push(obj.tagId)
+      }
+
+      tags.map(tag => {
+        if (!empty.includes(tag.id)) {
+          dropdownTags.push(tag)
+        } else {
+          empty.push(tag.id)
+        }
+      })
+    }
+
+
+    if (currentUser.id === post.userProfile.id && dropdownTags) {
       return (
         <fieldset>
           <div className="form-group">
             <select defaultValue="" className="form-control" ref={tagToSave}>
               <option value="0" className="add-tag" >Choose Tag...</option>
-              {tags.filter(tag => tag.active === true).filter(tag => !postTags.includes(tag.name)).map(l => (
+              {dropdownTags.filter(tag => tag.active === true).map(l => (
                 <option key={l.id} value={l.id}>
                   {l.name}
                 </option>
