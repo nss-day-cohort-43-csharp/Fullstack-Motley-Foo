@@ -52,6 +52,14 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Post(PostTag postTag)
         {
+            var currentUser = GetCurrentUserProfile();
+            var postUserId = _postRepo.GetById(postTag.PostId);
+
+            if (currentUser.Id != postUserId.UserProfileId)
+            {
+                return NotFound();
+            }
+
             _postTagRepo.Add(postTag);
             return NoContent();
         }
@@ -59,6 +67,14 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var currentUser = GetCurrentUserProfile();
+            var postUserId = _postRepo.GetById(id);
+
+            if (currentUser.Id != postUserId.UserProfileId)
+            {
+                return NotFound();
+            }
+
             _postTagRepo.Delete(id);
             return NoContent();
         }

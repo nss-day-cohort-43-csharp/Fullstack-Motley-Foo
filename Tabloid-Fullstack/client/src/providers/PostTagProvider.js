@@ -48,7 +48,7 @@ export function PostTagProvider(props) {
         },
         body: JSON.stringify(postTag),
       }).then(() => {
-        getAllPostTags();
+        getPostsTags(postTag.postId)
       }
       )
     );

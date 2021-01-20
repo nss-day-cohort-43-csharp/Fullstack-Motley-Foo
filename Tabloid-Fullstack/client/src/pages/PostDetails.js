@@ -12,6 +12,7 @@ import { TagContext } from "../providers/TagProvider";
 import {
   Button,
 } from "reactstrap";
+import { UserProfileContext } from "../providers/UserProfileProvider"
 
 
 const PostDetails = () => {
@@ -21,7 +22,10 @@ const PostDetails = () => {
   const [comments, setComments] = useState([]);
   const { postTags, getPostsTags, addPostTag } = useContext(PostTagContext);
   const { tags, getTags, setTags, getTagById } = useContext(TagContext);
+  const { getCurrentUser } = useContext(UserProfileContext);
   const tagToSave = useRef(null);
+
+  const currentUser = getCurrentUser();
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -67,6 +71,26 @@ const PostDetails = () => {
     }
   }
 
+  const userCheck = () => {
+    if (currentUser.id === post.userProfile.id) {
+      return (
+        <fieldset>
+          <div className="form-group">
+            <select defaultValue="" className="form-control" ref={tagToSave}>
+              <option value="0" className="add-tag" >Choose Tag...</option>
+              {tags.filter(tag => tag.active === true).filter(tag => !postTags.includes(tag.name)).map(l => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+            <Button onClick={postTagSaver}>add</Button>
+          </div>
+        </fieldset>
+      )
+    }
+  }
+
   return (
     <div>
       <Jumbotron
@@ -90,20 +114,8 @@ const PostDetails = () => {
           </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
+        {userCheck()}
         {tagList()}
-        <fieldset>
-          <div className="form-group">
-            <select defaultValue="" className="form-control" ref={tagToSave}>
-              <option value="0" className="add-tag" >Choose Tag...</option>
-              {tags.filter(tag => tag.active === true).filter(tag => !postTags.includes(tag.name)).map(l => (
-                <option key={l.id} value={l.id}>
-                  {l.name}
-                </option>
-              ))}
-            </select>
-            <Button onClick={postTagSaver}>add</Button>
-          </div>
-        </fieldset>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
