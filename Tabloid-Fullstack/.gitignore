@@ -365,3 +365,4 @@ FodyWeavers.xsd
 .env.local
 
 appsettings.Local.json
+.vscode/
