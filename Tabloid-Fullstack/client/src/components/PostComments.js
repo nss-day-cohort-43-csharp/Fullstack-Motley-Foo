@@ -3,13 +3,15 @@ import './PostComments.css';
 import formatDate from '../utils/dateFormatter';
 
 const PostComments = ({ postComments }) => {
-  console.log(postComments);
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-center row">
         <div className="col-md-8">
           {postComments.map((comment) => (
-            <div className="d-flex flex-column comment-section bg-light">
+            <div
+              className="d-flex flex-column comment-section bg-light"
+              key={comment.id}
+            >
               <div className="bg-white p-2">
                 <div className="d-flex flex-row user-info">
                   <div className="d-flex flex-column justify-content-start ml-2">
