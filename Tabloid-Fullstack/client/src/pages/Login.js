@@ -17,7 +17,8 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     login(email, password)
-      .then((user) => {
+        .then((user) => {
+          console.log(user)
         setLoading(false);
         toast.info(`Welcome back ${user.displayName}`);
         history.push("/");

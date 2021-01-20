@@ -1,3 +1,11 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Jumbotron } from 'reactstrap';
+import PostComments from '../components/PostComments';
+import PostReactions from '../components/PostReactions';
+import formatDate from '../utils/dateFormatter';
+import './PostDetails.css';
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +22,7 @@ const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
+  const [comments, setComments] = useState([]);
   const { postTags, getPostsTags, addPostTag } = useContext(PostTagContext);
   const { tags, getTags, setTags } = useContext(TagContext);
 
@@ -29,6 +38,7 @@ const PostDetails = () => {
       .then((data) => {
         setPost(data.post);
         setReactionCounts(data.reactionCounts);
+        setComments(data.comments);
         getPostsTags(postId);
         getTags()
       });
@@ -99,6 +109,7 @@ const PostDetails = () => {
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
+        <PostComments postComments={comments} />
       </div>
     </div>
   );
