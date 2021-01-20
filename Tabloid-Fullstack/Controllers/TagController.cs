@@ -29,13 +29,6 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var currentUser = GetCurrentUserProfile();
-
-            if (currentUser.UserTypeId != UserType.ADMIN_ID)
-            {
-                return NotFound();
-            }
-
             var tags = _tagRepo.Get();
             return Ok(tags);
         }

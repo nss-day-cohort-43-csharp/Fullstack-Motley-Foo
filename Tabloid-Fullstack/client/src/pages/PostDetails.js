@@ -6,12 +6,16 @@ import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
 import { PostTagContext } from "../providers/PostTagProvider"
+import PostTagCard from "../components/PostTagCard"
+import { TagContext } from "../providers/TagProvider"
+
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
-  const { postTags, getPostsTags } = useContext(PostTagContext);
+  const { postTags, getPostsTags, addPostTag } = useContext(PostTagContext);
+  const { tags, getTags, setTags } = useContext(TagContext);
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -26,6 +30,7 @@ const PostDetails = () => {
         setPost(data.post);
         setReactionCounts(data.reactionCounts);
         getPostsTags(postId);
+        getTags()
       });
   }, [postId]);
 
@@ -34,12 +39,23 @@ const PostDetails = () => {
   const tagList = () => {
     if (postTags != null) {
       return (
-        postTags.tags.map((tag) => (
-          <div className="m-4" key={tag.id}>
-            <PostTagCard postTag={tag} />
+        postTags.map((postTag) => (
+          <div className="m-4" key={postTag.id}>
+            <PostTagCard postTag={postTag} />
           </div>
         ))
       )
+    }
+  }
+
+  const postTagSaver = () => {
+    const tagId = parseInt(document.querySelector(".add-tag").value)
+    if (tagId !== 0) {
+      const postTag = {
+        postId,
+        tagId
+      }
+      addPostTag(postTag)
     }
   }
 
@@ -67,7 +83,19 @@ const PostDetails = () => {
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {tagList()}
-        <button>Edit Tags</button>
+        <fieldset>
+          <div className="form-group">
+            <select defaultValue="" className="form-control" >
+              <option value="0" class="add-tag">Choose Tag...</option>
+              {tags.filter(tag => tag.active === true).filter(tag => !postTags.includes(tag.name)).map(l => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+            <button onClick={(e) => { postTagSaver() }}>add</button>
+          </div>
+        </fieldset>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>

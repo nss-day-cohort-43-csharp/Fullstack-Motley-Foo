@@ -58,7 +58,8 @@ export function TagProvider(props) {
         editTag,
         deactivateTag,
         getTags,
-        tags
+        tags,
+        setTags
       }}
     >
       {props.children}

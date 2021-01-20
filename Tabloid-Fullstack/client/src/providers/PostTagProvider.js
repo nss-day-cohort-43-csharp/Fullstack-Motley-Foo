@@ -4,7 +4,7 @@ import { UserProfileContext } from "../providers/UserProfileProvider";
 export const PostTagContext = createContext();
 
 export function PostTagProvider(props) {
-  const apiUrl = "/api/posttag";
+  const apiUrl = "/api/postTag";
 
   const { getToken } = useContext(UserProfileContext);
   const [postTags, setPostTags] = useState([]);
@@ -34,7 +34,7 @@ export function PostTagProvider(props) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(postTag),
-      }).then(getPostTags)
+      }).then(getAllPostTags)
     )
   };
 
@@ -48,7 +48,7 @@ export function PostTagProvider(props) {
         },
         body: JSON.stringify(postTag),
       }).then(() => {
-        getPostTags();
+        getAllPostTags();
       }
       )
     );
