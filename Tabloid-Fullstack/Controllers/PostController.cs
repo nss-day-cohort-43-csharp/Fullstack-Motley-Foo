@@ -61,6 +61,17 @@ namespace Tabloid_Fullstack.Controllers
             return CreatedAtAction("Get", new { id = post.Id }, post);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var user = GetCurrentUserProfile();
+            var postToDelete = GetById(id);
+
+            
+            _repo.Delete(id);
+            return NoContent();
+        }
+
 
         private UserProfile GetCurrentUserProfile()
         {
