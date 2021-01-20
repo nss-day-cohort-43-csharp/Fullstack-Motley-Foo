@@ -13,3 +13,9 @@
 .post-details__content {
   line-height: 30px;
 }
+
+.delete-post-button {
+  float: right;
+  cursor: pointer;
+  font-size: larger;
+}

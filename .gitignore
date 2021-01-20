@@ -24,3 +24,4 @@ yarn-error.log*
 
 .eslintcache
 .vs/Tabloid-Fullstack/v16/.suo
+.vs/
