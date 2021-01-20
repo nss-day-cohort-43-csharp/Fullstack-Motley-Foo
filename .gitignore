@@ -363,3 +363,6 @@ FodyWeavers.xsd
 
 appsettings.Local.json
 client/.eslintcache
+
+# Adding the .vscode to the ignore - this shouldn't cause problems
+.vscode 
