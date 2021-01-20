@@ -1,10 +1,10 @@
-import React from "react";
-import { Badge } from "reactstrap";
-import "./PostReaction.css";
+import React from 'react';
+import { Badge } from 'reactstrap';
+import './PostReaction.css';
 
 const PostReactions = ({ postReactions }) => {
   return (
-    <div className="float-left">
+    <div className="center">
       {postReactions.map((postReaction) => (
         <div key={postReaction.reaction.id} className="d-inline-block mx-2">
           <Badge
