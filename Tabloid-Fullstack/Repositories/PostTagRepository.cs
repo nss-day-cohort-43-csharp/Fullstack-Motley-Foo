@@ -37,11 +37,8 @@ namespace Tabloid_Fullstack.Repositories
             _context.SaveChanges();
         }
 
-        public void Add(int postId, int tagId)
+        public void Add(PostTag postTag)
         {
-            var postTag = new PostTag();
-            postTag.Tag.Id = tagId;
-            postTag.Post.Id = postId;
             _context.Add(postTag);
             _context.SaveChanges();
         }

@@ -32,6 +32,12 @@ namespace Tabloid_Fullstack.Controllers
             var tags = _tagRepo.Get();
             return Ok(tags);
         }
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var tag = _tagRepo.GetById(id);
+            return Ok(tag);
+        }
 
         [HttpPost]
         public IActionResult Post(Tag tag)

@@ -28,7 +28,7 @@ export function PostTagProvider(props) {
   const deletePostTag = (postTag) => {
     getToken().then((token) =>
       fetch(`${apiUrl}/${postTag.id}`, {
-        method: "PUT",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

@@ -19,11 +19,15 @@ namespace Tabloid_Fullstack.Controllers
 
         private IPostTagRepository _postTagRepo;
         private IUserProfileRepository _userRepo;
+        private IPostRepository _postRepo;
+        private ITagRepository _tagRepo;
 
-        public PostTagController(IPostTagRepository postTagRepo, IUserProfileRepository userRepo)
+        public PostTagController(IPostTagRepository postTagRepo, IUserProfileRepository userRepo, IPostRepository postRepo, ITagRepository tagRepo)
         {
             _postTagRepo = postTagRepo;
             _userRepo = userRepo;
+            _postRepo = postRepo;
+            _tagRepo = tagRepo;
         }
 
 
@@ -46,9 +50,9 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(postTags);
         }
         [HttpPost]
-        public IActionResult Post(int postId, int tagId)
+        public IActionResult Post(PostTag postTag)
         {
-            _postTagRepo.Add(postId, tagId);
+            _postTagRepo.Add(postTag);
             return NoContent();
         }
 

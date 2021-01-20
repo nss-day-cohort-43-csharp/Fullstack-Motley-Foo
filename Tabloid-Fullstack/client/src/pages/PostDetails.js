@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Jumbotron } from 'reactstrap';
@@ -6,16 +6,12 @@ import PostComments from '../components/PostComments';
 import PostReactions from '../components/PostReactions';
 import formatDate from '../utils/dateFormatter';
 import './PostDetails.css';
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Jumbotron } from "reactstrap";
-import PostReactions from "../components/PostReactions";
-import formatDate from "../utils/dateFormatter";
-import "./PostDetails.css";
 import { PostTagContext } from "../providers/PostTagProvider"
 import PostTagCard from "../components/PostTagCard"
-import { TagContext } from "../providers/TagProvider"
+import { TagContext } from "../providers/TagProvider";
+import {
+  Button,
+} from "reactstrap";
 
 
 const PostDetails = () => {
@@ -24,7 +20,8 @@ const PostDetails = () => {
   const [reactionCounts, setReactionCounts] = useState([]);
   const [comments, setComments] = useState([]);
   const { postTags, getPostsTags, addPostTag } = useContext(PostTagContext);
-  const { tags, getTags, setTags } = useContext(TagContext);
+  const { tags, getTags, setTags, getTagById } = useContext(TagContext);
+  const tagToSave = useRef(null);
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -59,13 +56,14 @@ const PostDetails = () => {
   }
 
   const postTagSaver = () => {
-    const tagId = parseInt(document.querySelector(".add-tag").value)
+    const tagId = parseInt(tagToSave.current.value)
     if (tagId !== 0) {
-      const postTag = {
+      const postTag =
+      {
         postId,
         tagId
       }
-      addPostTag(postTag)
+      addPostTag(postTag);
     }
   }
 
@@ -95,15 +93,15 @@ const PostDetails = () => {
         {tagList()}
         <fieldset>
           <div className="form-group">
-            <select defaultValue="" className="form-control" >
-              <option value="0" class="add-tag">Choose Tag...</option>
+            <select defaultValue="" className="form-control" ref={tagToSave}>
+              <option value="0" className="add-tag" >Choose Tag...</option>
               {tags.filter(tag => tag.active === true).filter(tag => !postTags.includes(tag.name)).map(l => (
                 <option key={l.id} value={l.id}>
                   {l.name}
                 </option>
               ))}
             </select>
-            <button onClick={(e) => { postTagSaver() }}>add</button>
+            <Button onClick={postTagSaver}>add</Button>
           </div>
         </fieldset>
         <div className="my-4">

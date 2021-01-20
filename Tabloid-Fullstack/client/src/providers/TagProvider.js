@@ -25,6 +25,18 @@ export function TagProvider(props) {
     );
   };
 
+  const getTagById = (id) => {
+    return getToken().then((token) =>
+      fetch(`/api/tag/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+    );
+  };
+
   const editTag = (tag) => {
     getToken().then((token) =>
       fetch(`${apiUrl}/${tag.id}`, {
@@ -59,7 +71,8 @@ export function TagProvider(props) {
         deactivateTag,
         getTags,
         tags,
-        setTags
+        setTags,
+        getTagById
       }}
     >
       {props.children}

@@ -5,7 +5,7 @@ namespace Tabloid_Fullstack.Repositories
 {
     public interface IPostTagRepository
     {
-        void Add(int postId, int tagId);
+        void Add(PostTag postTag);
         void Delete(int id);
         List<PostTag> GetAll();
         List<PostTag> GetByPostId(int id);
