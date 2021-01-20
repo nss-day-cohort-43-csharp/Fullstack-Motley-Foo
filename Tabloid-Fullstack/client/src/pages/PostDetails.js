@@ -31,8 +31,6 @@ const PostDetails = () => {
 
   if (!post) return null;
 
-  console.log('This is the array of comments for this post', comments);
-
   return (
     <div>
       <Jumbotron
