@@ -48,7 +48,7 @@ const PostDetails = () => {
               Authorization: `Bearer ${token}`
             }
           })
-            .then(history.push("/explore/"))
+            .then(history.push("/myposts"))
         })
     }
   }
