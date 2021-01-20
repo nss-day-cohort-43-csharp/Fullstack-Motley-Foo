@@ -68,9 +68,9 @@ namespace Tabloid_Fullstack.Controllers
         public IActionResult Delete(int id)
         {
             var currentUser = GetCurrentUserProfile();
-            var postUserId = _postRepo.GetById(id);
+            var postUserId = _postTagRepo.GetById(id).Post.UserProfileId;
 
-            if (currentUser.Id != postUserId.UserProfileId)
+            if (currentUser.Id != postUserId)
             {
                 return NotFound();
             }

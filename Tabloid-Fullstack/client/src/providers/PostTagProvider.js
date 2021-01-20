@@ -34,7 +34,7 @@ export function PostTagProvider(props) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(postTag),
-      }).then(getAllPostTags)
+      }).then(() => { getPostsTags(postTag.postId) })
     )
   };
 

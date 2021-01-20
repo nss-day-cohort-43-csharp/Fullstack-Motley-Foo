@@ -24,6 +24,13 @@ namespace Tabloid_Fullstack.Repositories
                 .Include(pt => pt.Tag)
                 .OrderBy(pt => pt.Tag.Name).ToList();
         }
+        public PostTag GetById(int id)
+        {
+            return _context.PostTag
+                .Include(pt => pt.Post)
+                .Include(pt => pt.Tag)
+                .FirstOrDefault(pt => pt.Id == id);
+        }
 
         public List<PostTag> GetByPostId(int id)
         {

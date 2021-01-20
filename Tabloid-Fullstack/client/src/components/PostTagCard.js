@@ -1,10 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card } from "reactstrap";
+import React, { useContext } from "react";
+import { UserProfileContext } from "../providers/UserProfileProvider"
 
 const PostTagCard = ({ postTag }) => {
+
+  const { getCurrentUser } = useContext(UserProfileContext);
   return (
-    <div>{postTag.tag.name} <button>x</button></div>
+    <div>{postTag.tag.name}</div>
   );
 };
 

@@ -20,7 +20,7 @@ const PostDetails = () => {
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
   const [comments, setComments] = useState([]);
-  const { postTags, getPostsTags, addPostTag } = useContext(PostTagContext);
+  const { postTags, getPostsTags, addPostTag, deletePostTag } = useContext(PostTagContext);
   const { tags, getTags, setTags, getTagById } = useContext(TagContext);
   const { getCurrentUser } = useContext(UserProfileContext);
   const tagToSave = useRef(null);
@@ -32,23 +32,34 @@ const PostDetails = () => {
       .then((res) => {
         if (res.status === 404) {
           toast.error("This isn't the post you're looking for");
-            return;
+          return;
         }
         return res.json();
       })
       .then((data) => {
-        setPost(data.post);
-        setReactionCounts(data.reactionCounts);
-        setComments(data.comments);
-        getPostsTags(postId);
-        getTags()
+        if (data != undefined) {
+          setPost(data.post);
+          setReactionCounts(data.reactionCounts);
+          setComments(data.comments);
+          getPostsTags(postId);
+          getTags()
+        }
       });
   }, [postId]);
 
   if (!post) return null;
 
   const tagList = () => {
-    if (postTags != null) {
+    if (postTags != null && currentUser.id === post.userProfile.id) {
+      return (
+        postTags.map((postTag) => (
+          <div className="m-4" key={postTag.id}>
+            <PostTagCard postTag={postTag} />
+            <Button onClick={(e) => { deletePostTag(postTag) }}>x</Button>
+          </div>
+        ))
+      )
+    } else if (postTags != null) {
       return (
         postTags.map((postTag) => (
           <div className="m-4" key={postTag.id}>
@@ -115,6 +126,7 @@ const PostDetails = () => {
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {userCheck()}
+        Tags:
         {tagList()}
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
