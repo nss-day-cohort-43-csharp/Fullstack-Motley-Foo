@@ -362,4 +362,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # We're adding the .vscode to the git ignore
+appsettings.Local.json
+client/.eslintcache
+
+# Adding the .vscode to the ignore - this shouldn't cause problems
 .vscode 
