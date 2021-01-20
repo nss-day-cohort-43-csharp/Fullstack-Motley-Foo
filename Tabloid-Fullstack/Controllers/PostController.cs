@@ -17,11 +17,13 @@ namespace Tabloid_Fullstack.Controllers
 
         private IPostRepository _repo;
         private IUserProfileRepository _userRepo;
+        private ICommentRepository _commentRepo;
 
-        public PostController(IPostRepository repo, IUserProfileRepository userRepo)
+        public PostController(IPostRepository repo, IUserProfileRepository userRepo, ICommentRepository commentRepo)
         {
             _repo = repo;
             _userRepo = userRepo;
+            _commentRepo = commentRepo;
         }
 
 
@@ -42,10 +44,12 @@ namespace Tabloid_Fullstack.Controllers
             }
 
             var reactionCounts = _repo.GetReactionCounts(id);
+            var comments = _commentRepo.GetByPostId(id);
             var postDetails = new PostDetails()
             {
                 Post = post,
-                ReactionCounts = reactionCounts
+                ReactionCounts = reactionCounts,
+                Comments = comments
             };
             return Ok(postDetails);
         }

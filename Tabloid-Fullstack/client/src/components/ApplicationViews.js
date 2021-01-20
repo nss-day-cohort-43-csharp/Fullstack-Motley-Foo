@@ -7,9 +7,29 @@ import Register from "../pages/Register";
 import PostDetails from "../pages/PostDetails";
 import CategoryManager from "../pages/CategoryManager";
 import PostForm from "../pages/PostForm";
+import TagManager from "../pages/TagManager"
+import { TagProvider } from "../providers/TagProvider"
 
 const ApplicationViews = () => {
-  const { isLoggedIn } = useContext(UserProfileContext);
+  const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
+
+  const authLevel = () => {
+
+    if (isLoggedIn && isAdmin()) {
+      return (
+        <>
+          <TagProvider>
+            <Route path="/tags">
+              <TagManager />
+            </Route>
+          </TagProvider>
+        </>)
+    } else if (isLoggedIn && !isAdmin()) {
+      return (<Redirect to="/" />)
+    } else {
+      return (<Redirect to="/login" />)
+    }
+  };
 
   return (
     <Switch>
@@ -34,6 +54,7 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
+      {authLevel()}
     </Switch>
   );
 };
