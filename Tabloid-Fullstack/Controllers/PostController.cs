@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Models.ViewModels;
@@ -15,10 +16,12 @@ namespace Tabloid_Fullstack.Controllers
     {
 
         private IPostRepository _repo;
+        private IUserProfileRepository _userRepo;
 
-        public PostController(IPostRepository repo)
+        public PostController(IPostRepository repo, IUserProfileRepository userRepo)
         {
             _repo = repo;
+            _userRepo = userRepo;
         }
 
 
@@ -50,8 +53,17 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPost]
         public IActionResult Post(Post post)
         {
+            var currentUser = GetCurrentUserProfile();
+
             _repo.Add(post);
             return CreatedAtAction("Get", new { id = post.Id }, post);
+        }
+
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }
