@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Jumbotron } from 'reactstrap';
@@ -6,12 +6,16 @@ import PostComments from '../components/PostComments';
 import PostReactions from '../components/PostReactions';
 import formatDate from '../utils/dateFormatter';
 import './PostDetails.css';
+import { UserProfileContext } from "../providers/UserProfileProvider";
+import { useHistory } from "react-router-dom";
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
   const [comments, setComments] = useState([]);
+  const { getToken } = useContext(UserProfileContext);
+  const history = useHistory();
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -31,28 +35,66 @@ const PostDetails = () => {
 
   if (!post) return null;
 
-  console.log('This is the array of comments for this post', comments);
+  const deletePost = () => {
+    getToken()
+      .then((token) => {
+        fetch(`../api/post/${postId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+          .then(history.push("/explore/"))
+      })
+
+  }
+
+  const ImageClip = () => {
+    if (post.imageLocation !== null) {
+      return (
+        <Jumbotron
+          className="post-details__jumbo"
+          style={{ backgroundImage: `url('${post.imageLocation}')` }}
+        ></Jumbotron>
+      )
+    }
+    else {
+      return (
+        <Jumbotron
+          className="post-details__jumbo"
+          style={{ backgroundImage: `url('https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg')` }}
+        ></Jumbotron>
+
+      )
+    }
+  }
+
+  const TrashCan = () => {
+    const user = JSON.parse(localStorage.getItem('userProfile'));
+    if (user.id === post.userProfileId) {
+      return (
+        <div className="delete-post-button" onClick={() => { deletePost() }}>🗑️</div>
+      )
+    }
+    else {
+      return null
+    }
+  }
 
   return (
     <div>
-      <Jumbotron
-        className="post-details__jumbo"
-        style={{ backgroundImage: `url('${post.imageLocation}')` }}
-      ></Jumbotron>
+      <ImageClip />
       <div className="container">
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
         <div className="row">
           <div className="col">
-            <img
-              src={post.userProfile.imageLocation}
-              alt={post.userProfile.displayName}
-              className="post-details__avatar rounded-circle"
-            />
             <p className="d-inline-block">{post.userProfile.displayName}</p>
           </div>
           <div className="col">
-            <p>{formatDate(post.publishDateTime)}</p>
+            <div>{formatDate(post.publishDateTime)}
+              <TrashCan />
+            </div>
           </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
