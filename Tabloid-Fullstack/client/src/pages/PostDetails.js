@@ -27,9 +27,11 @@ const PostDetails = () => {
         return res.json();
       })
       .then((data) => {
-        setPost(data.post);
-        setReactionCounts(data.reactionCounts);
-        setComments(data.comments);
+        if (data != undefined) {
+          setPost(data.post);
+          setReactionCounts(data.reactionCounts);
+          setComments(data.comments);
+        }
       });
   }, [postId]);
 
