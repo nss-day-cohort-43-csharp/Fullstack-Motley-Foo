@@ -36,9 +36,6 @@ const PostDetails = () => {
   if (!post) return null;
 
   const deletePost = () => {
-
-
-    var txt;
     var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
     if (r == true) {
       getToken()
@@ -51,17 +48,7 @@ const PostDetails = () => {
           })
             .then(history.push("/explore/"))
         })
-
-
-    } else {
-
     }
-
-
-
-
-
-
   }
 
   const ImageClip = () => {

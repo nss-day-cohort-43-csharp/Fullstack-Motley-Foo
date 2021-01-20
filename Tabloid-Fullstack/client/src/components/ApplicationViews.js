@@ -9,6 +9,7 @@ import CategoryManager from "../pages/CategoryManager";
 import PostForm from "../pages/PostForm";
 import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
+import MyPosts from "../pages/MyPosts"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -35,6 +36,9 @@ const ApplicationViews = () => {
     <Switch>
       <Route path="/" exact>
         {isLoggedIn ? <p>Home</p> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/myposts">
+        {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
       </Route>
       <Route path="/explore">
         {isLoggedIn ? <Explore /> : <Redirect to="/login" />}

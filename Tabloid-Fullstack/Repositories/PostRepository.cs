@@ -79,6 +79,24 @@ namespace Tabloid_Fullstack.Repositories
             _context.SaveChanges();
         }
 
-
+        public List<PostSummary> GetByUserProfileId(int id)
+        {
+            return _context.Post
+                .Include(p => p.Category)
+                .Where(p => p.UserProfileId == id)
+                .OrderByDescending(p => p.CreateDateTime)
+                .Select(p => new PostSummary()
+                {
+                    Id = p.Id,
+                    ImageLocation = p.ImageLocation,
+                    Title = p.Title,
+                    AuthorId = p.UserProfileId,
+                    AuthorName = p.UserProfile.DisplayName,
+                    AbbreviatedText = p.Content.Substring(0, 200),
+                    PublishDateTime = p.PublishDateTime,
+                    Category = p.Category
+                })
+                .ToList();
+        }
     }
 }
