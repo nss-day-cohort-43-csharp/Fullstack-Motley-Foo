@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Jumbotron } from "reactstrap";
 import PostReactions from "../components/PostReactions";
 import formatDate from "../utils/dateFormatter";
 import "./PostDetails.css";
+import { PostTagContext } from "../providers/PostTagProvider"
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
+  const { postTags, getPostsTags } = useContext(PostTagContext);
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -23,10 +25,23 @@ const PostDetails = () => {
       .then((data) => {
         setPost(data.post);
         setReactionCounts(data.reactionCounts);
+        getPostsTags(postId);
       });
   }, [postId]);
 
   if (!post) return null;
+
+  const tagList = () => {
+    if (postTags != null) {
+      return (
+        postTags.tags.map((tag) => (
+          <div className="m-4" key={tag.id}>
+            <PostTagCard postTag={tag} />
+          </div>
+        ))
+      )
+    }
+  }
 
   return (
     <div>
@@ -51,6 +66,8 @@ const PostDetails = () => {
           </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
+        {tagList()}
+        <button>Edit Tags</button>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
