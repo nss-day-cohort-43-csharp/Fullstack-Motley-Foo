@@ -24,12 +24,29 @@ namespace Tabloid_Fullstack.Controllers
             _userRepo = userRepo;
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetByPostId(int id) 
+        {
+            var comments = _commentRepo.GetByPostId(id);
+            return Ok(comments);
+        }
+
 
         [HttpPost]
         public IActionResult Post(Comment comment)
         {
+            var User = GetCurrentUserProfile();
+            comment.UserProfileId = User.Id;
+            comment.CreateDateTime = DateTime.Now;
             _commentRepo.Add(comment);
             return CreatedAtAction("Get", new { id = comment.Id }, comment);
+        }
+        
+        //this is a tool to simply get the current user.
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }
