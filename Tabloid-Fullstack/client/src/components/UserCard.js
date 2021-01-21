@@ -34,15 +34,15 @@ const UserCard = ({ user }) => {
         <div className="col-lg-3 col-sm-12">
           <ImageCard />
         </div>
-        <div className=" col-sm-12 py-3">
-          <div>
+        <div className="col-sm-12 py-3 text-left">
+          <div className="mt-2 ml-4 text-center">
             <h2>{user.displayName}</h2>
           </div>
-          <p className="text-justify mx-5">{user.firstName} {user.lastName}</p>
+          <div className="text-justify ml-4">{user.firstName} {user.lastName}</div>
         </div>
-        <div className="col-lg-4 col-sm-12 mt-2 py-3 text-left">
-          <p className="ml-5 text-info">Type: {user.userType.Name}</p>
-          <p className="ml-5">
+        <div className="col-lg-6 col-sm-12 text-left">
+          <p className="ml-4 text-info">Type: {user.userType.name}</p>
+          <p className="ml-4">
             Created on {formatDate(user.createDateTime)}
           </p>
         </div>

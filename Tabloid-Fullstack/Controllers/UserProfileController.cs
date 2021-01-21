@@ -12,6 +12,7 @@ using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -39,7 +40,7 @@ namespace Tabloid_Fullstack.Controllers
                 new { firebaseUserId = userProfile.FirebaseUserId },
                 userProfile);
         }
-        [Authorize]
+        
         [HttpGet]
         public IActionResult Get()
         {
