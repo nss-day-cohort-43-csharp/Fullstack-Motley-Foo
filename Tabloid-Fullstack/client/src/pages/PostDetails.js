@@ -126,12 +126,6 @@ const PostDetails = () => {
     }
   }
 
-  return (
-    <div>
-      <Jumbotron
-        className="post-details__jumbo"
-        style={{ backgroundImage: `url('${post.imageLocation}')` }}
-      ></Jumbotron>
   const deletePost = () => {
     var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
     if (r == true) {
