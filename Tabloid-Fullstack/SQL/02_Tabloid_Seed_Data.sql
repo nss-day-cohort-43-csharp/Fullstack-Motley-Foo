@@ -5,8 +5,8 @@ set identity_insert [UserType] off
 
 set identity_insert [Category] on
 insert into [Category] ([Id], [Name], [IsActive]) 
-values (1, 'Technology', True), (2, 'Politics', True), (3, 'Science', True), (4, 'Cooking', True), (5, 'Music', True),
-	   (6, 'Cthulhu Sightings', True), (7, 'History', True), (8, 'Home and Garden', True), (9, 'Entertainment', True)
+values (1, 'Technology', 1), (2, 'Politics', 1), (3, 'Science', 1), (4, 'Cooking', 1), (5, 'Music', 1),
+	   (6, 'Cthulhu Sightings', 1), (7, 'History', 1), (8, 'Home and Garden', 1), (9, 'Entertainment', 1)
 set identity_insert [Category] off
 
 set identity_insert [Tag] on
