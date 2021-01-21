@@ -4,6 +4,7 @@
 
 .comment-text {
   font-size: 12px;
+  overflow-wrap: break-word;
 }
 .comment-subject {
   font-size: 14px;
@@ -33,4 +34,5 @@
 
 .textarea {
   resize: none;
+  overflow: auto;
 }

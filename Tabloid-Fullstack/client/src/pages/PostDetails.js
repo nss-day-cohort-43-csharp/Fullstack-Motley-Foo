@@ -17,7 +17,6 @@ const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
-  const [comments, setComments] = useState([]);
   const { postTags, getPostsTags, addPostTag, deletePostTag } = useContext(
     PostTagContext
   );
@@ -42,7 +41,6 @@ const PostDetails = () => {
         if (data != undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
-          setComments(data.comments);
           getPostsTags(postId);
           getTags();
         }
