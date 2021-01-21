@@ -24,7 +24,6 @@ const PostForm = () => {
     }, []);
 
     const submitPost = (post) => {
-        debugger
         getToken().then((token) => {
             fetch(`/api/post`, {
                 method: "POST",

@@ -8,5 +8,6 @@ namespace Tabloid_Fullstack.Repositories
         void Add(UserProfile userProfile);
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         List<UserProfile> GetAll();
+        void Update(UserProfile userProfile);
     }
 }
