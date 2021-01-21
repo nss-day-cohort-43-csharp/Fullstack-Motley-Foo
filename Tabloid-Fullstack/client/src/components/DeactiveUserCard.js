@@ -6,7 +6,20 @@ import { UserProfileContext } from "../providers/UserProfileProvider"
 const DeactiveUserCard = ({ user }) => {
 
   const [pendingDelete, setPendingDelete] = useState(false);
+  const [pendingChange, setPendingChange] = useState(false);
   const { activateUser } = useContext(UserProfileContext);
+
+  const changeUserActivation = () => {
+    user.Active = true;
+  }
+
+  const changeUserType = () => {
+    if (user.userTypeId === 1) {
+      user.userTypeId = 2
+    } else {
+      user.userTypeId = 1
+    }
+  }
 
   const ImageCard = () => {
     if (user.imageLocation === null) {
@@ -57,6 +70,12 @@ const DeactiveUserCard = ({ user }) => {
           >
             Activate
             </Button>
+          <Button
+            className="btn btn-warning"
+            onClick={(e) => setPendingChange(true)}
+          >
+            Change Type
+            </Button>
         </div>
       </Card>
       {/* DELETE CONFIRM MODAL */}
@@ -68,12 +87,30 @@ const DeactiveUserCard = ({ user }) => {
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
+            changeUserActivation();
             activateUser(user);
             setPendingDelete(false);
             Modal.isOpen = { pendingDelete }
           }}>Yes, Reactivate</Button>
         </ModalFooter>
       </Modal>
+      {/* DELETE CONFIRM MODAL */}
+      <Modal isOpen={pendingChange}>
+        <ModalHeader>Change {user.displayName}'s user type?</ModalHeader>
+        <ModalBody>
+          Are you sure you want to change this user's privileges?
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={(e) => setPendingChange(false)}>No, Cancel</Button>
+          <Button className="btn btn-outline-danger" onClick={(e) => {
+            changeUserType();
+            activateUser(user);
+            setPendingChange(false);
+            Modal.isOpen = { pendingChange }
+          }}>Yes, Change</Button>
+        </ModalFooter>
+      </Modal>
+
     </>
   );
 };

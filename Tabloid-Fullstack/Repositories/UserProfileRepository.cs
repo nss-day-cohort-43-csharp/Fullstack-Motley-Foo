@@ -40,14 +40,6 @@ namespace Tabloid_Fullstack.Repositories
         }
         public void Update(UserProfile userProfile)
         {
-            if(userProfile.Active == false)
-            {
-                userProfile.Active = true;
-            }
-            else
-            {
-                userProfile.Active = false;
-            }
             _context.Entry(userProfile).State = EntityState.Modified;
             _context.SaveChanges();
         }
