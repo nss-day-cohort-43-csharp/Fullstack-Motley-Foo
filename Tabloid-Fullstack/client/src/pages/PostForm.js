@@ -53,7 +53,14 @@ const PostForm = () => {
         else {
             newPost.categoryId = parseInt(newPost.categoryId)
             newPost.isApproved = 1
-            submitPost(newPost)
+            if (isNaN(newPost.categoryId)) {
+                window.alert("You must select a category for this post!")
+            }
+            else {
+                submitPost(newPost)
+            }
+
+
         }
     }
 
@@ -78,7 +85,9 @@ const PostForm = () => {
                         <div className="form-group">
                             <label className="new-post-label" htmlFor="newCategoryId">Category</label>
                             <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={handleControlledInputChange}>
+                                <option>Select a category...</option>
                                 {categories.map((category) => {
+
                                     return <option key={category.id} value={category.id}>{category.name}</option>
                                 })}
                             </select>
