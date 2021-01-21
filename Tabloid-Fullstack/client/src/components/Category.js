@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserProfileContext } from "../providers/UserProfileProvider";
 import {
   Button,
   ButtonGroup,
@@ -11,11 +12,12 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-const Category = ({ category }) => {
+const Category = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
-  const [categoryEdits, setCategoryEdits] = useState("");
-
+    const [categoryEdits, setCategoryEdits] = useState("");
+    const category = props.category;
+    
   const showEditForm = () => {
     setIsEditing(true);
     setCategoryEdits(category.name);
@@ -24,7 +26,7 @@ const Category = ({ category }) => {
   const hideEditForm = () => {
     setIsEditing(false);
     setCategoryEdits("");
-  };
+    };
 
   return (
     <div className="justify-content-between row">
@@ -68,8 +70,11 @@ const Category = ({ category }) => {
           undone.
         </ModalBody>
         <ModalFooter>
-          <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
-          <Button className="btn btn-outline-danger">Yes, Delete</Button>
+                  <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+                  <Button className="btn btn-outline-danger" onClick={() => {
+                      props.delete(category.id);
+                      setPendingDelete(false);
+                  }} > Yes, Delete</Button>
         </ModalFooter>
       </Modal>
     </div>
