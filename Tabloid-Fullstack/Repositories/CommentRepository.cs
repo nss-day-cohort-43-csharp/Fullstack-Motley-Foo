@@ -25,9 +25,9 @@ namespace Tabloid_Fullstack.Repositories
                 .ToList();
         }
 
-        public void Add(Comment category)
+        public void Add(Comment comment)
         {
-            _context.Add(category);
+            _context.Add(comment);
             _context.SaveChanges();
         }
     }
