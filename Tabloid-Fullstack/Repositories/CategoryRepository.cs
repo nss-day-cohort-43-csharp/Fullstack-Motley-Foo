@@ -32,5 +32,9 @@ namespace Tabloid_Fullstack.Repositories
             _context.Category.Remove(cat);
             _context.SaveChanges();
         }
+        public void editCategory(int id)
+        {
+
+        }
     }
 }
