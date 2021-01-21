@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tabloid_Fullstack.Models;
 using Tabloid_Fullstack.Repositories;
@@ -10,6 +12,7 @@ using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -23,7 +26,16 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet("{firebaseUserId}")]
         public IActionResult GetUserProfile(string firebaseUserId)
         {
-            return Ok(_repo.GetByFirebaseUserId(firebaseUserId));
+            var user = _repo.GetByFirebaseUserId(firebaseUserId);
+            if (user.Active == false)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(user);
+            }
+
         }
 
         [HttpPost]
@@ -31,11 +43,45 @@ namespace Tabloid_Fullstack.Controllers
         {
             userProfile.CreateDateTime = DateTime.Now;
             userProfile.UserTypeId = UserType.AUTHOR_ID;
+            userProfile.Active = true;
             _repo.Add(userProfile);
             return CreatedAtAction(
                 nameof(GetUserProfile),
                 new { firebaseUserId = userProfile.FirebaseUserId },
                 userProfile);
+        }
+        
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
+
+            var tags = _repo.GetAll();
+            return Ok(tags);
+        }
+        [HttpPut("{id}")]
+        public IActionResult Put(UserProfile userProfile)
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
+
+            _repo.Update(userProfile);
+            return NoContent();
+        }
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _repo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

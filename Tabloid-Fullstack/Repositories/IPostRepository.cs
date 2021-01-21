@@ -13,7 +13,5 @@ namespace Tabloid_Fullstack.Repositories
         
         List<PostSummary> GetByUserProfileId(int id);
         List<ReactionCount> GetReactionCounts(int postId);
-
-
     }
 }

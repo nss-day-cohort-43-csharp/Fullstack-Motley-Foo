@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { UserProfileContext } from "../providers/UserProfileProvider";
+import { UserProfileContext, UserProfileProvider } from "../providers/UserProfileProvider";
 import Explore from "../pages/Explore";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -11,6 +11,9 @@ import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
 import MyPosts from "../pages/MyPosts"
 import PostEdit from "../pages/PostEdit";
+import { PostTagProvider } from "../providers/PostTagProvider"
+import UserManager from "../pages/UserManager"
+import DeactiveUserManager from "../pages/DeactiveUserManager"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -25,6 +28,16 @@ const ApplicationViews = () => {
               <TagManager />
             </Route>
           </TagProvider>
+          <UserProfileProvider>
+            <Route path="/users">
+              <UserManager />
+            </Route>
+          </UserProfileProvider>
+          <UserProfileProvider>
+            <Route path="/deactive">
+              <DeactiveUserManager />
+            </Route>
+          </UserProfileProvider>
         </>)
     } else if (isLoggedIn && !isAdmin()) {
       return (<Redirect to="/" />)
@@ -44,12 +57,18 @@ const ApplicationViews = () => {
       <Route path="/explore">
         {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
       </Route>
+
       <Route path="/post/:postId">
-        {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+        <PostTagProvider>
+          <TagProvider>
+            {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+          </TagProvider>
+        </PostTagProvider>
       </Route>
       <Route path="/editpost/:postId">
         {isLoggedIn ? <PostEdit /> : <Redirect to="/login" />}
       </Route>
+
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
       </Route>
@@ -62,8 +81,8 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      {authLevel()}
-    </Switch>
+      { authLevel()}
+    </Switch >
   );
 };
 

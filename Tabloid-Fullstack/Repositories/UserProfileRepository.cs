@@ -27,14 +27,22 @@ namespace Tabloid_Fullstack.Repositories
 
         }
 
+        public List<UserProfile> GetAll()
+        {
+            return _context.UserProfile.OrderBy(up => up.DisplayName)
+                .Include(up => up.UserType).ToList();
+        }
+
         public void Add(UserProfile userProfile)
         {
             _context.Add(userProfile);
             _context.SaveChanges();
         }
-
-
-
+        public void Update(UserProfile userProfile)
+        {
+            _context.Entry(userProfile).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
 
     }
 }
