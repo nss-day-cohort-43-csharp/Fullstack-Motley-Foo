@@ -8,5 +8,7 @@ namespace Tabloid_Fullstack.Models
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

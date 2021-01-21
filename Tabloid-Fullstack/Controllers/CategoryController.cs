@@ -53,11 +53,11 @@ namespace Tabloid_Fullstack.Controllers
             _categoryRepo.deleteCategory(id);
             return NoContent();
         }
-        [HttpPut("{id}")]
-        public IActionResult Edit(int id)
-        {
+        //[HttpPut("{id}")]
+        //public IActionResult Edit(int id)
+        //{
 
-        }
+        //}
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
