@@ -4,6 +4,7 @@ import formatDate from '../utils/dateFormatter';
 import { useParams } from 'react-router-dom';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { toast } from 'react-toastify';
+import { Button } from 'reactstrap';
 
 const PostComments = () => {
   const { getToken, getCurrentUser } = useContext(UserProfileContext);
@@ -11,6 +12,7 @@ const PostComments = () => {
   const [comments, setComments] = useState([]);
   const [commentSubject, setCommentSubject] = useState('');
   const [commentContent, setCommentContent] = useState('');
+  const activeUser = getCurrentUser();
 
   useEffect(() => {
     getComments();
@@ -81,6 +83,18 @@ const PostComments = () => {
                 <div className="mt-1">
                   <p className="comment-text">{comment.content}</p>
                 </div>
+                {getCurrentUser().id === comment.userProfileId ? (
+                  <Button
+                    onClick={() => {
+                      console.log(
+                        `you clicked the delete button on comment ${comment.id}`
+                      );
+                    }}
+                  >
+                    {' '}
+                    Delete{' '}
+                  </Button>
+                ) : null}
               </div>
             </div>
           ))}

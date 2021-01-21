@@ -41,6 +41,22 @@ namespace Tabloid_Fullstack.Controllers
             _commentRepo.Add(comment);
             return CreatedAtAction("Get", new { id = comment.Id }, comment);
         }
+
+        [HttpDelete()]
+        public IActionResult Delete(int id) 
+        {
+            var user = GetCurrentUserProfile();
+            var commentToDelete = _commentRepo.GetByCommentId(id);
+
+            if (commentToDelete.UserProfileId != user.Id)
+            {
+                return Unauthorized();
+            }
+
+            _commentRepo.Delete(id);
+            return NoContent();
+
+        }
         
         //this is a tool to simply get the current user.
         private UserProfile GetCurrentUserProfile()
