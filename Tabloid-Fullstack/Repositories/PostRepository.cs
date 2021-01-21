@@ -45,6 +45,7 @@ namespace Tabloid_Fullstack.Repositories
                 .Include(p => p.UserProfile)
                 .Include(p => p.Category)
                 .Include(p => p.PostReactions)
+                .Include(p => p.PostTags)
                 .Include(p => p.Comments)
                 .Where(p => p.Id == id&&p.IsApproved&&p.PublishDateTime<DateTime.Now)
                 .FirstOrDefault();
@@ -88,8 +89,13 @@ namespace Tabloid_Fullstack.Repositories
             foreach (PostReaction postReaction in postReactions)
             {
                 _context.PostReaction.Remove(postReaction);
-            }            
-      
+            }
+
+            var tags = post.PostTags;
+            foreach (PostTag tag in tags)
+            {
+                _context.PostTag.Remove(tag);
+            }
             
             _context.Post.Remove(post);
             _context.SaveChanges();

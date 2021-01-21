@@ -59,8 +59,6 @@ const PostForm = () => {
             else {
                 submitPost(newPost)
             }
-
-
         }
     }
 
@@ -87,7 +85,6 @@ const PostForm = () => {
                             <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={handleControlledInputChange}>
                                 <option>Select a category...</option>
                                 {categories.map((category) => {
-
                                     return <option key={category.id} value={category.id}>{category.name}</option>
                                 })}
                             </select>
