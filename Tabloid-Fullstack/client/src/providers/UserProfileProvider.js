@@ -7,6 +7,7 @@ export const UserProfileContext = createContext();
 
 export function UserProfileProvider(props) {
   const apiUrl = "/api/userprofile";
+  const [users, setUsers] = useState([]);
 
   const userProfile = localStorage.getItem("userProfile");
   const [isLoggedIn, setIsLoggedIn] = useState(userProfile != null);
@@ -67,6 +68,18 @@ export function UserProfileProvider(props) {
     );
   };
 
+  const getAllUserProfiles = () => {
+    return getToken().then((token) =>
+      fetch(`${apiUrl}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => resp.json())
+        .then(setUsers)
+    );
+  };
+
   const saveUser = (userProfile) => {
     return getToken().then((token) =>
       fetch(apiUrl, {
@@ -104,6 +117,9 @@ export function UserProfileProvider(props) {
         getToken,
         getCurrentUser,
         isAdmin,
+        getAllUserProfiles,
+        users,
+        setUsers
       }}
     >
       {isFirebaseReady ? (
