@@ -54,6 +54,19 @@ namespace Tabloid_Fullstack.Controllers
             var tags = _repo.GetAll();
             return Ok(tags);
         }
+        [HttpPut("{id}")]
+        public IActionResult Put(UserProfile userProfile)
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
+
+            _repo.Update(userProfile);
+            return NoContent();
+        }
 
         private UserProfile GetCurrentUserProfile()
         {

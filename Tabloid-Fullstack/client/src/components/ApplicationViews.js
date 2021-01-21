@@ -12,6 +12,7 @@ import { TagProvider } from "../providers/TagProvider"
 import MyPosts from "../pages/MyPosts"
 import { PostTagProvider } from "../providers/PostTagProvider"
 import UserManager from "../pages/UserManager"
+import DeactiveUserManager from "../pages/DeactiveUserManager"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -29,6 +30,11 @@ const ApplicationViews = () => {
           <UserProfileProvider>
             <Route path="/users">
               <UserManager />
+            </Route>
+          </UserProfileProvider>
+          <UserProfileProvider>
+            <Route path="/deactive">
+              <DeactiveUserManager />
             </Route>
           </UserProfileProvider>
         </>)

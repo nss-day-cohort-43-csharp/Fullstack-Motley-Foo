@@ -3,10 +3,10 @@ import { Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reacts
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from "../providers/UserProfileProvider"
 
-const UserCard = ({ user }) => {
+const DeactiveUserCard = ({ user }) => {
 
   const [pendingDelete, setPendingDelete] = useState(false);
-  const { deactivateUser } = useContext(UserProfileContext);
+  const { activateUser } = useContext(UserProfileContext);
 
   const ImageCard = () => {
     if (user.imageLocation === null) {
@@ -55,27 +55,27 @@ const UserCard = ({ user }) => {
             className="btn btn-danger"
             onClick={(e) => setPendingDelete(true)}
           >
-            Deactivate
+            Activate
             </Button>
         </div>
       </Card>
       {/* DELETE CONFIRM MODAL */}
       <Modal isOpen={pendingDelete}>
-        <ModalHeader>Deactivate {user.displayName}?</ModalHeader>
+        <ModalHeader>Reactivate {user.displayName}?</ModalHeader>
         <ModalBody>
-          Are you sure you want to deactivate this user?
+          Are you sure you want to reactivate this user?
         </ModalBody>
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
-            deactivateUser(user);
+            activateUser(user);
             setPendingDelete(false);
             Modal.isOpen = { pendingDelete }
-          }}>Yes, Deactivate</Button>
+          }}>Yes, Reactivate</Button>
         </ModalFooter>
       </Modal>
     </>
   );
 };
 
-export default UserCard;
+export default DeactiveUserCard;
