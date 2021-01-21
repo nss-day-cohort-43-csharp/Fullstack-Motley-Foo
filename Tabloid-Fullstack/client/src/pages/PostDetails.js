@@ -27,7 +27,7 @@ const PostDetails = () => {
         return res.json();
       })
       .then((data) => {
-        if (data != undefined) {
+        if (data !== undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
           setComments(data.comments);
@@ -39,7 +39,7 @@ const PostDetails = () => {
 
   const deletePost = () => {
     var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
-    if (r == true) {
+    if (r === true) {
       getToken()
         .then((token) => {
           fetch(`../api/post/${postId}`, {

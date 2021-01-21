@@ -33,18 +33,14 @@ const PostSummaryCard = ({ post }) => {
 
 
   const directToEdit = () => {
-    history.push(`post/${post.id}`)
+    history.push(`/editpost/${post.id}`)
   }
-
-
-
 
   const EditButton = () => {
     const user = JSON.parse(localStorage.getItem('userProfile'));
-    console.log(post)
     if (post.authorId === user.id) {
       return (
-        <div className="ml-5 edit-post-button" onclick={() => { directToEdit() }}>EDIT</div>
+        <div className="ml-5 edit-post-button" onClick={() => { directToEdit() }}>EDIT</div>
       )
     } else {
       return null

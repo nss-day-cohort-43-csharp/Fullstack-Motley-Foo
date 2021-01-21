@@ -10,6 +10,7 @@ import PostForm from "../pages/PostForm";
 import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
 import MyPosts from "../pages/MyPosts"
+import PostEdit from "../pages/PostEdit";
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -45,6 +46,9 @@ const ApplicationViews = () => {
       </Route>
       <Route path="/post/:postId">
         {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/editpost/:postId">
+        {isLoggedIn ? <PostEdit /> : <Redirect to="/login" />}
       </Route>
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
