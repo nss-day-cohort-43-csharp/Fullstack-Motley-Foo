@@ -6,22 +6,20 @@ import PostComments from '../components/PostComments';
 import PostReactions from '../components/PostReactions';
 import formatDate from '../utils/dateFormatter';
 import './PostDetails.css';
-import { PostTagContext } from "../providers/PostTagProvider"
-import PostTagCard from "../components/PostTagCard"
-import { TagContext } from "../providers/TagProvider";
-import {
-  Button,
-} from "reactstrap";
-import { UserProfileContext } from "../providers/UserProfileProvider"
-import { useHistory } from "react-router-dom";
-
+import { PostTagContext } from '../providers/PostTagProvider';
+import PostTagCard from '../components/PostTagCard';
+import { TagContext } from '../providers/TagProvider';
+import { Button } from 'reactstrap';
+import { UserProfileContext } from '../providers/UserProfileProvider';
+import { useHistory } from 'react-router-dom';
 
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState();
   const [reactionCounts, setReactionCounts] = useState([]);
-  const [comments, setComments] = useState([]);
-  const { postTags, getPostsTags, addPostTag, deletePostTag } = useContext(PostTagContext);
+  const { postTags, getPostsTags, addPostTag, deletePostTag } = useContext(
+    PostTagContext
+  );
   const { tags, getTags, setTags, getTagById } = useContext(TagContext);
   const { getCurrentUser } = useContext(UserProfileContext);
   const tagToSave = useRef(null);
@@ -43,9 +41,8 @@ const PostDetails = () => {
         if (data !== undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
-          setComments(data.comments);
           getPostsTags(postId);
-          getTags()
+          getTags();
         }
       });
   }, [postId]);
@@ -54,39 +51,38 @@ const PostDetails = () => {
 
   const tagList = () => {
     if (postTags != null && currentUser.id === post.userProfile.id) {
-      return (
-        postTags.map((postTag) => (
-          <div className="m-4" key={postTag.id}>
-            <PostTagCard postTag={postTag} />
-            <Button onClick={(e) => { deletePostTag(postTag) }}>x</Button>
-          </div>
-        ))
-      )
+      return postTags.map((postTag) => (
+        <div className="m-4" key={postTag.id}>
+          <PostTagCard postTag={postTag} />
+          <Button
+            onClick={(e) => {
+              deletePostTag(postTag);
+            }}
+          >
+            x
+          </Button>
+        </div>
+      ));
     } else if (postTags != null) {
-      return (
-        postTags.map((postTag) => (
-          <div className="m-4" key={postTag.id}>
-            <PostTagCard postTag={postTag} />
-          </div>
-        ))
-      )
+      return postTags.map((postTag) => (
+        <div className="m-4" key={postTag.id}>
+          <PostTagCard postTag={postTag} />
+        </div>
+      ));
     }
-  }
+  };
 
   const postTagSaver = () => {
-    const tagId = parseInt(tagToSave.current.value)
+    const tagId = parseInt(tagToSave.current.value);
     if (tagId !== 0) {
-      const postTag =
-      {
+      const postTag = {
         postId,
-        tagId
-      }
+        tagId,
+      };
       addPostTag(postTag);
-      tagToSave.current.value = "0";
+      tagToSave.current.value = '0';
     }
-  }
-
-
+  };
 
   const userCheck = () => {
     let empty = [];
@@ -94,53 +90,56 @@ const PostDetails = () => {
     let dropdownTags = [];
     if (postTags) {
       for (const obj of postTags) {
-        empty.push(obj.tagId)
+        empty.push(obj.tagId);
       }
 
-      tags.map(tag => {
+      tags.map((tag) => {
         if (!empty.includes(tag.id)) {
-          dropdownTags.push(tag)
+          dropdownTags.push(tag);
         } else {
-          empty.push(tag.id)
+          empty.push(tag.id);
         }
-      })
+      });
     }
-
 
     if (currentUser.id === post.userProfile.id && dropdownTags) {
       return (
         <fieldset>
           <div className="form-group">
             <select defaultValue="" className="form-control" ref={tagToSave}>
-              <option value="0" className="add-tag" >Choose Tag...</option>
-              {dropdownTags.filter(tag => tag.active === true).map(l => (
-                <option key={l.id} value={l.id}>
-                  {l.name}
-                </option>
-              ))}
+              <option value="0" className="add-tag">
+                Choose Tag...
+              </option>
+              {dropdownTags
+                .filter((tag) => tag.active === true)
+                .map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
+                ))}
             </select>
             <Button onClick={postTagSaver}>add</Button>
           </div>
         </fieldset>
-      )
+      );
     }
-  }
+  };
 
   const deletePost = () => {
-    var r = window.confirm("Are you sure you want to delete this? It cannot be undone.");
-    if (r === true) {
-      getToken()
-        .then((token) => {
-          fetch(`../api/post/${postId}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-            .then(history.push("/myposts"))
-        })
+    var r = window.confirm(
+      'Are you sure you want to delete this? It cannot be undone.'
+    );
+    if (r == true) {
+      getToken().then((token) => {
+        fetch(`../api/post/${postId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then(history.push('/myposts'));
+      });
     }
-  }
+  };
 
   const ImageClip = () => {
     if (post.imageLocation !== null) {
@@ -149,30 +148,36 @@ const PostDetails = () => {
           className="post-details__jumbo"
           style={{ backgroundImage: `url('${post.imageLocation}')` }}
         ></Jumbotron>
-      )
-    }
-    else {
+      );
+    } else {
       return (
         <Jumbotron
           className="post-details__jumbo"
-          style={{ backgroundImage: `url('https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg')` }}
+          style={{
+            backgroundImage: `url('https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg')`,
+          }}
         ></Jumbotron>
-
-      )
+      );
     }
-  }
+  };
 
   const TrashCan = () => {
     const user = JSON.parse(localStorage.getItem('userProfile'));
     if (user.id === post.userProfileId) {
       return (
-        <div className="delete-post-button" onClick={() => { deletePost() }}>🗑️</div>
-      )
+        <div
+          className="delete-post-button"
+          onClick={() => {
+            deletePost();
+          }}
+        >
+          🗑️
+        </div>
+      );
+    } else {
+      return null;
     }
-    else {
-      return null
-    }
-  }
+  };
 
   return (
     <div>
@@ -185,7 +190,8 @@ const PostDetails = () => {
             <p className="d-inline-block">{post.userProfile.displayName}</p>
           </div>
           <div className="col">
-            <div>{formatDate(post.publishDateTime)}
+            <div>
+              {formatDate(post.publishDateTime)}
               <TrashCan />
             </div>
           </div>
@@ -197,7 +203,7 @@ const PostDetails = () => {
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>
-        <PostComments postComments={comments} />
+        <PostComments />
       </div>
     </div>
   );
