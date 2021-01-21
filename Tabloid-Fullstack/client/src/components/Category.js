@@ -12,12 +12,12 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-const Category = ({ category }) => {
+const Category = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
     const [categoryEdits, setCategoryEdits] = useState("");
-    const { getToken} = useContext(UserProfileContext);
-
+    const category = props.category;
+    
   const showEditForm = () => {
     setIsEditing(true);
     setCategoryEdits(category.name);
@@ -26,17 +26,6 @@ const Category = ({ category }) => {
   const hideEditForm = () => {
     setIsEditing(false);
     setCategoryEdits("");
-    };
-
-    const deleteCategory = (id) => {
-        getToken().then((token) =>
-            fetch(`/api/category/${id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-        );
     };
 
   return (
@@ -82,7 +71,10 @@ const Category = ({ category }) => {
         </ModalBody>
         <ModalFooter>
                   <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
-                  <Button className="btn btn-outline-danger" onClick={() => deleteCategory(category.id)} > Yes, Delete</Button>
+                  <Button className="btn btn-outline-danger" onClick={() => {
+                      props.delete(category.id);
+                      setPendingDelete(false);
+                  }} > Yes, Delete</Button>
         </ModalFooter>
       </Modal>
     </div>

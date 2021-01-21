@@ -30,6 +30,7 @@ namespace Tabloid_Fullstack.Repositories
         {
             Category cat = (Category)_context.Category.Where(c => c.Id == id).First();
             _context.Category.Remove(cat);
+            _context.SaveChanges();
         }
     }
 }

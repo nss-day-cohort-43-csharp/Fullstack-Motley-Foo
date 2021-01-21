@@ -53,6 +53,17 @@ const CategoryManager = () => {
         );
     };
 
+    const deleteCategory = (id) => {
+        getToken().then((token) =>
+            fetch(`/api/category/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then(() => { getCategories(); })
+        );
+    };
+
     return (
     <>
         {admin?(
@@ -70,7 +81,7 @@ const CategoryManager = () => {
                             <ListGroup>
                                 {categories.map((category) => (
                                     <ListGroupItem key={category.id}>
-                                        <Category category={category} />
+                                        <Category category={category} delete={deleteCategory}/>
                                     </ListGroupItem>
                                 ))}
                             </ListGroup>
