@@ -30,5 +30,11 @@ namespace Tabloid_Fullstack.Repositories
             _context.Add(comment);
             _context.SaveChanges();
         }
+
+        public void Delete(Comment comment)
+        {
+            _context.Comment.Remove(comment);
+            _context.SaveChanges();
+        }
     }
 }
