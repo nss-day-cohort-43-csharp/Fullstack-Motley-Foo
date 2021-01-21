@@ -26,7 +26,16 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet("{firebaseUserId}")]
         public IActionResult GetUserProfile(string firebaseUserId)
         {
-            return Ok(_repo.GetByFirebaseUserId(firebaseUserId));
+            var user = _repo.GetByFirebaseUserId(firebaseUserId);
+            if (user.Active == false)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(user);
+            }
+
         }
 
         [HttpPost]
@@ -34,6 +43,7 @@ namespace Tabloid_Fullstack.Controllers
         {
             userProfile.CreateDateTime = DateTime.Now;
             userProfile.UserTypeId = UserType.AUTHOR_ID;
+            userProfile.Active = true;
             _repo.Add(userProfile);
             return CreatedAtAction(
                 nameof(GetUserProfile),

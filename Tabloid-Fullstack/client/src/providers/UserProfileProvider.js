@@ -25,9 +25,14 @@ export function UserProfileProvider(props) {
       .signInWithEmailAndPassword(email, pw)
       .then((signInResponse) => getUserProfile(signInResponse.user.uid))
       .then((userProfile) => {
-        localStorage.setItem("userProfile", JSON.stringify(userProfile));
-        setIsLoggedIn(true);
-        return userProfile;
+        if (userProfile.active === true) {
+          localStorage.setItem("userProfile", JSON.stringify(userProfile));
+          setIsLoggedIn(true);
+          return userProfile;
+        } else {
+          return null;
+        }
+
       });
   };
 
