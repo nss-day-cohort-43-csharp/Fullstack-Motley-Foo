@@ -58,5 +58,45 @@ namespace Tabloid_Fullstack.Repositories
                 })
                 .ToList();
         }
+
+        public void Add(Post post)
+        {
+            post.CreateDateTime = DateTime.Now;
+
+            if (post.PublishDateTime == null)
+            {
+                post.PublishDateTime = DateTime.Now;
+            }
+
+            _context.Add(post);
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var post = GetById(id);
+            _context.Post.Remove(post);
+            _context.SaveChanges();
+        }
+
+        public List<PostSummary> GetByUserProfileId(int id)
+        {
+            return _context.Post
+                .Include(p => p.Category)
+                .Where(p => p.UserProfileId == id)
+                .OrderByDescending(p => p.CreateDateTime)
+                .Select(p => new PostSummary()
+                {
+                    Id = p.Id,
+                    ImageLocation = p.ImageLocation,
+                    Title = p.Title,
+                    AuthorId = p.UserProfileId,
+                    AuthorName = p.UserProfile.DisplayName,
+                    AbbreviatedText = p.Content.Substring(0, 200),
+                    PublishDateTime = p.PublishDateTime,
+                    Category = p.Category
+                })
+                .ToList();
+        }
     }
 }
