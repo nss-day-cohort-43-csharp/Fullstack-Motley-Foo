@@ -42,7 +42,7 @@ namespace Tabloid_Fullstack.Controllers
             {
                 return Unauthorized();
             }
-
+            category.IsActive = true;
             _categoryRepo.Add(category);
             return CreatedAtAction("Get", new { id = category.Id }, category);
         }

@@ -37,7 +37,7 @@ const CategoryManager = () => {
     };
 
     const saveNewCategory = () => {
-        const categoryToAdd = { name: newCategory };
+        const categoryToAdd = { name: newCategory};
         getToken().then((token) =>
             fetch("/api/category", {
                 method: "POST",
