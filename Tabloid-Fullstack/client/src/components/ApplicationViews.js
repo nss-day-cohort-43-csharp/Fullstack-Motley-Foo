@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { UserProfileContext } from "../providers/UserProfileProvider";
+import { UserProfileContext, UserProfileProvider } from "../providers/UserProfileProvider";
 import Explore from "../pages/Explore";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -10,6 +10,8 @@ import PostForm from "../pages/PostForm";
 import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
 import MyPosts from "../pages/MyPosts"
+import { PostTagProvider } from "../providers/PostTagProvider"
+import UserManager from "../pages/UserManager"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -24,6 +26,11 @@ const ApplicationViews = () => {
               <TagManager />
             </Route>
           </TagProvider>
+          <UserProfileProvider>
+            <Route path="/users">
+              <UserManager />
+            </Route>
+          </UserProfileProvider>
         </>)
     } else if (isLoggedIn && !isAdmin()) {
       return (<Redirect to="/" />)
@@ -43,9 +50,15 @@ const ApplicationViews = () => {
       <Route path="/explore">
         {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
       </Route>
+
       <Route path="/post/:postId">
-        {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+        <PostTagProvider>
+          <TagProvider>
+            {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+          </TagProvider>
+        </PostTagProvider>
       </Route>
+
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
       </Route>

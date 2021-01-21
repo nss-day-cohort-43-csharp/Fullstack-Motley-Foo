@@ -8,5 +8,6 @@ namespace Tabloid_Fullstack.Repositories
         void Add(Tag tag);
         List<Tag> Get();
         public void Update(Tag tag);
+        public Tag GetById(int id);
     }
 }
