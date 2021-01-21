@@ -42,11 +42,22 @@ namespace Tabloid_Fullstack.Controllers
             {
                 return Unauthorized();
             }
-
+            category.IsActive = true;
             _categoryRepo.Add(category);
             return CreatedAtAction("Get", new { id = category.Id }, category);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _categoryRepo.deleteCategory(id);
+            return NoContent();
+        }
+        //[HttpPut("{id}")]
+        //public IActionResult Edit(int id)
+        //{
+
+        //}
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

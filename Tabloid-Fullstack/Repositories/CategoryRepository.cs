@@ -17,13 +17,27 @@ namespace Tabloid_Fullstack.Repositories
 
         public List<Category> Get()
         {
-            return _context.Category.OrderBy(c => c.Name).ToList();
+            return _context.Category.OrderBy(c => c.Name).Where(c=>c.IsActive==true).ToList();
         }
 
         public void Add(Category category)
         {
             _context.Add(category);
             _context.SaveChanges();
+        }
+
+        public void deleteCategory(int id)
+        {
+            var cat = _context.Category.FirstOrDefault(c => c.Id == id);
+            if (cat != null)
+            {
+                cat.IsActive = false;
+                _context.SaveChanges();
+            }
+        }
+        public void editCategory(int id)
+        {
+
         }
     }
 }
