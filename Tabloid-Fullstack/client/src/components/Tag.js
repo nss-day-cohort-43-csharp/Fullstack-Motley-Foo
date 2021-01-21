@@ -76,7 +76,7 @@ const Tag = ({ tag }) => {
         )}
       {/* DELETE CONFIRM MODAL */}
       <Modal isOpen={pendingDelete}>
-        <ModalHeader>Delele {tag.name}?</ModalHeader>
+        <ModalHeader>Delete {tag.name}?</ModalHeader>
         <ModalBody>
           Are you sure you want to delete this tag? This action cannot be
           undone.
