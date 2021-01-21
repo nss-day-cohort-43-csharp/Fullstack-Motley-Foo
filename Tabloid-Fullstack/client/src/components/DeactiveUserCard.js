@@ -3,14 +3,14 @@ import { Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reacts
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from "../providers/UserProfileProvider"
 
-const UserCard = ({ user }) => {
+const DeactiveUserCard = ({ user }) => {
 
   const [pendingDelete, setPendingDelete] = useState(false);
   const [pendingChange, setPendingChange] = useState(false);
-  const { deactivateUser } = useContext(UserProfileContext);
+  const { activateUser } = useContext(UserProfileContext);
 
   const changeUserActivation = () => {
-    user.Active = false;
+    user.Active = true;
   }
 
   const changeUserType = () => {
@@ -68,7 +68,7 @@ const UserCard = ({ user }) => {
             className="btn btn-danger"
             onClick={(e) => setPendingDelete(true)}
           >
-            Deactivate
+            Activate
             </Button>
           <Button
             className="btn btn-warning"
@@ -80,18 +80,18 @@ const UserCard = ({ user }) => {
       </Card>
       {/* DELETE CONFIRM MODAL */}
       <Modal isOpen={pendingDelete}>
-        <ModalHeader>Deactivate {user.displayName}?</ModalHeader>
+        <ModalHeader>Reactivate {user.displayName}?</ModalHeader>
         <ModalBody>
-          Are you sure you want to deactivate this user?
+          Are you sure you want to reactivate this user?
         </ModalBody>
         <ModalFooter>
           <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserActivation();
-            deactivateUser(user);
+            activateUser(user);
             setPendingDelete(false);
             Modal.isOpen = { pendingDelete }
-          }}>Yes, Deactivate</Button>
+          }}>Yes, Reactivate</Button>
         </ModalFooter>
       </Modal>
       {/* DELETE CONFIRM MODAL */}
@@ -104,14 +104,15 @@ const UserCard = ({ user }) => {
           <Button onClick={(e) => setPendingChange(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
-            deactivateUser(user);
+            activateUser(user);
             setPendingChange(false);
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
         </ModalFooter>
       </Modal>
+
     </>
   );
 };
 
-export default UserCard;
+export default DeactiveUserCard;

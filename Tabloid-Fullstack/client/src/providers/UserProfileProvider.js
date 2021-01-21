@@ -25,9 +25,14 @@ export function UserProfileProvider(props) {
       .signInWithEmailAndPassword(email, pw)
       .then((signInResponse) => getUserProfile(signInResponse.user.uid))
       .then((userProfile) => {
-        localStorage.setItem("userProfile", JSON.stringify(userProfile));
-        setIsLoggedIn(true);
-        return userProfile;
+        if (userProfile.active === true) {
+          localStorage.setItem("userProfile", JSON.stringify(userProfile));
+          setIsLoggedIn(true);
+          return userProfile;
+        } else {
+          return null;
+        }
+
       });
   };
 
@@ -80,6 +85,18 @@ export function UserProfileProvider(props) {
     );
   };
 
+  const getAllDeactiveUserProfiles = () => {
+    return getToken().then((token) =>
+      fetch(`${apiUrl}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => resp.json())
+        .then(setUsers)
+    );
+  };
+
   const saveUser = (userProfile) => {
     return getToken().then((token) =>
       fetch(apiUrl, {
@@ -107,6 +124,32 @@ export function UserProfileProvider(props) {
     return user !== null && user.userTypeId === adminTypeId;
   };
 
+  const deactivateUser = (user) => {
+    getToken().then((token) =>
+      fetch(`${apiUrl}/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user),
+      }).then(getAllUserProfiles)
+    )
+  };
+
+  const activateUser = (user) => {
+    getToken().then((token) =>
+      fetch(`${apiUrl}/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user),
+      }).then(getAllDeactiveUserProfiles)
+    )
+  };
+
   return (
     <UserProfileContext.Provider
       value={{
@@ -119,7 +162,10 @@ export function UserProfileProvider(props) {
         isAdmin,
         getAllUserProfiles,
         users,
-        setUsers
+        setUsers,
+        deactivateUser,
+        getAllDeactiveUserProfiles,
+        activateUser
       }}
     >
       {isFirebaseReady ? (
