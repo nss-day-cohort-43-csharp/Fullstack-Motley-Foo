@@ -57,7 +57,6 @@ const PostEdit = () => {
     }
 
     const updatePost = (post) => {
-        console.log(post)
         post.userProfile = null
         getToken().then((token) => {
             fetch(`/api/post/${post.id}`, {
@@ -74,7 +73,6 @@ const PostEdit = () => {
 
     const handleControlledInputChange = (event) => {
         post[event.target.id] = event.target.value
-        console.log(post)
     }
 
     const handleClickSubmitPost = (event) => {

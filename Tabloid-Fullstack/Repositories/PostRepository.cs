@@ -76,33 +76,9 @@ namespace Tabloid_Fullstack.Repositories
         }
 
         public void Update(Post post)
-        {
-            //var newPost = new Post()
-            //{
-            //    Id = post.Id,
-            //    Title = post.Title,
-            //    Content = post.Content,
-            //    ImageLocation = post.ImageLocation,
-            //    CreateDateTime = post.CreateDateTime,
-            //    PublishDateTime = post.PublishDateTime,
-            //    IsApproved = post.IsApproved,
-            //    CategoryId  = post.CategoryId,
-            //    UserProfileId = post.UserProfileId
-            //};
-
-            //_context.Update(post);
-            try
-            {
-                _context.Entry(post).State = EntityState.Modified;
-                _context.SaveChanges();
-
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            
-
+        {            
+            _context.Entry(post).State = EntityState.Modified;
+            _context.SaveChanges();         
         }
 
         public void Delete(int id)

@@ -95,22 +95,21 @@ namespace Tabloid_Fullstack.Controllers
                 return BadRequest();
             }
 
-            //var existingPost = _repo.GetById(id);
-            //if (existingPost == null)
-            //{
-            //    return NotFound();
-            //}
+            var user = GetCurrentUserProfile();
+
+            if (user.Id != post.UserProfileId)
+            {
+                return Unauthorized();
+            }
 
             _repo.Update(post);
             return NoContent();
-
         }
-
 
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepo.GetByFirebaseUserId(firebaseUserId);
+            return _userRepo.GetByFirebaseUserIdBare(firebaseUserId);
         }
     }
 }
