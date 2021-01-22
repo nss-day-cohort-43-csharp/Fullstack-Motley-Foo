@@ -13,8 +13,6 @@ const PostEdit = () => {
     useEffect(() => {
         getCategories()
         getPost()
-
-
     }, []);
 
     const getPost = () => {
@@ -52,25 +50,25 @@ const PostEdit = () => {
             const thisCategory = categories.find((category) => {
                 return post.categoryId === category.id
             })
-
             if (thisCategory !== undefined) {
                 return thisCategory.name
             }
         }
     }
 
-    const submitPost = (post) => {
+    const updatePost = (post) => {
+        console.log(post)
+        post.userProfile = null
         getToken().then((token) => {
-            fetch(`/api/post`, {
-                method: "POST",
+            fetch(`/api/post/${post.id}`, {
+                method: "PUT",
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(post)
             })
-                .then((res) => res.json())
-                .then((data) => history.push(`/post/${data.id}`))
+                .then(history.push(`/myposts`))
         })
     }
 
@@ -87,8 +85,7 @@ const PostEdit = () => {
         }
         else {
             post.categoryId = parseInt(post.categoryId)
-            console.log(post)
-            //submitPost(newPost)
+            updatePost(post)
         }
     }
 

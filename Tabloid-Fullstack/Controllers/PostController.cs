@@ -87,6 +87,25 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            //var existingPost = _repo.GetById(id);
+            //if (existingPost == null)
+            //{
+            //    return NotFound();
+            //}
+
+            _repo.Update(post);
+            return NoContent();
+
+        }
+
 
         private UserProfile GetCurrentUserProfile()
         {
