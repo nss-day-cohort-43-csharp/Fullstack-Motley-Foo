@@ -6,13 +6,13 @@ export const SubscriptionContext = createContext();
 export function SubscriptionProvider(props) {
   const apiUrl = "/api/subscription";
 
-  const { getToken, getCurrentUser } = useContext(UserProfileContext);
+  const { getToken } = useContext(UserProfileContext);
   const [subs, setSubs] = useState([]);
-  const userId = getCurrentUser().id;
+  const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
 
   const getSubsByUser = () => {
     getToken().then((token) =>
-      fetch(`${apiUrl}/${userId}`, {
+      fetch(`${apiUrl}/getbyuser/${userProfileId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -21,12 +21,17 @@ export function SubscriptionProvider(props) {
         .then((res) => res.json())
         .then((subs) => {
           setSubs(subs);
-        }
-        )
+        })
     );
   };
 
-  const addSub = (sub) => {
+  const addSub = (post) => {
+    const providerUserProfileId = post.userProfileId;
+    const subscriberUserProfileId = userProfileId;
+    const sub = {
+      subscriberUserProfileId,
+      providerUserProfileId
+    }
     getToken().then((token) =>
       fetch(`${apiUrl}`, {
         method: "POST",

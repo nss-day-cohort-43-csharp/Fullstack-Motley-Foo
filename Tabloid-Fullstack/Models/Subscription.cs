@@ -13,6 +13,6 @@ namespace Tabloid_Fullstack.Models
         public int SubscriberUserProfileId { get; set; }
         public int ProviderUserProfileId { get; set; }
         public DateTime BeginDateTime { get; set; }
-        public DateTime EndDateTame { get; set; }
+        public DateTime EndDateTime { get; set; }
     }
 }

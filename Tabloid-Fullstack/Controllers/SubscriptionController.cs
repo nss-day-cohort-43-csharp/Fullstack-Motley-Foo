@@ -26,21 +26,23 @@ namespace Tabloid_Fullstack.Controllers
             _userRepo = userRepo;
         }
 
-        [HttpGet("{userProfileId}")]
-        public IActionResult GetById(int id)
+        [HttpGet("getbyuser/{userProfileId}")]
+        public IActionResult GetById(int userProfileId)
         {
-            if(GetCurrentUserProfile().Id != id)
+            if(GetCurrentUserProfile().Id != userProfileId)
             {
-                return NotFound();
+                return null;
             }
 
-            List <Subscription> subs = _subRepo.GetByUserId(id);
+            List <Subscription> subs = _subRepo.GetByUserId(userProfileId);
             return Ok(subs);
         }
 
         [HttpPost]
         public IActionResult Post(Subscription subscription)
         {
+            subscription.BeginDateTime = DateTime.Now;
+            subscription.EndDateTime = DateTime.MaxValue;
             var currentUser = GetCurrentUserProfile();
 
             if (currentUser.Id != subscription.SubscriberUserProfileId)
@@ -55,9 +57,19 @@ namespace Tabloid_Fullstack.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, Subscription subscription)
         {
+
             if (id != subscription.Id)
             {
                 return BadRequest();
+            }
+
+            if(subscription.EndDateTime > DateTime.Now)
+            {
+                subscription.EndDateTime = DateTime.Now;
+            }
+            else
+            {
+                subscription.EndDateTime = DateTime.MaxValue;
             }
 
             _subRepo.Update(subscription);
