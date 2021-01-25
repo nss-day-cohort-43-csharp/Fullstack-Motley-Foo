@@ -45,11 +45,13 @@ namespace Tabloid_Fullstack.Controllers
 
             var reactionCounts = _repo.GetReactionCounts(id);
             var comments = _commentRepo.GetByPostId(id);
+            var readTime = post.Content.Length / 265;
             var postDetails = new PostDetails()
             {
                 Post = post,
                 ReactionCounts = reactionCounts,
-                Comments = comments
+                Comments = comments,
+                ReadTime=readTime
             };
             return Ok(postDetails);
         }
