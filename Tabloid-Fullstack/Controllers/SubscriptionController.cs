@@ -45,6 +45,25 @@ namespace Tabloid_Fullstack.Controllers
             }
         }
 
+        [HttpGet("getsubs/{userProfileId}")]
+        public IActionResult GetSubs(int userProfileId)
+        {
+            if (GetCurrentUserProfile().Id != userProfileId)
+            {
+                return null;
+            }
+
+            List<Subscription> subs = _subRepo.GetSubscribedPosts(userProfileId);
+            if (subs != null)
+            {
+                return Ok(subs);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         [HttpPost]
         public IActionResult Post(Subscription subscription)
         {

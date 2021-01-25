@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Tabloid_Fullstack.Data;
 using Tabloid_Fullstack.Models;
 using Microsoft.EntityFrameworkCore;
+using Tabloid_Fullstack.Models.ViewModels;
 
 namespace Tabloid_Fullstack.Repositories
 {
@@ -29,6 +30,14 @@ namespace Tabloid_Fullstack.Repositories
         {
             _context.Entry(subscription).State = EntityState.Modified;
             _context.SaveChanges();
+        }
+
+        public List<Subscription> GetSubscribedPosts(int userId)
+        {
+            return _context.Subscription.Where(sub => sub.SubscriberUserProfileId == userId)
+                .Include(sub => sub.ProviderUserProfile)
+                .Include(sub => sub.ProviderUserProfile.Post).ThenInclude(p => p.Category)
+                .ToList();
         }
     }
 }

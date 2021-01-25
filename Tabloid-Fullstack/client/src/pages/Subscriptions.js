@@ -1,27 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SubscriptionContext } from "../providers/SubscriptionProvider"
 import MySubs from "./MySubs";
-import { UserProfileContext } from "../providers/UserProfileProvider";
+
 
 const Subscriptions = () => {
-  const apiUrl = "/api/subscription";
-  const [subs, setSubs] = useState([]);
-  const { getToken } = useContext(UserProfileContext);
-  const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
+  const { subs, getSubsByUser } = useContext(SubscriptionContext);
 
   useEffect(() => {
-    getToken().then((token) =>
-      fetch(`${apiUrl}/getbyuser/${userProfileId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((subs) => {
-          setSubs(subs);
-        })
-    );
+    getSubsByUser()
   }, []);
 
 

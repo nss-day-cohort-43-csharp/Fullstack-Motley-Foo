@@ -15,7 +15,7 @@ export function SubscriptionProvider(props) {
   const getSubsByUser = () => {
     const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
     getToken().then((token) =>
-      fetch(`${apiUrl}/getbyuser/${userProfileId}`, {
+      fetch(`${apiUrl}/getsubs/${userProfileId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -23,7 +23,8 @@ export function SubscriptionProvider(props) {
       })
         .then((res) => res.json())
         .then((subs) => {
-          setSubs(subs);
+          const activeSubs = subs.filter(sub => sub.endDateTime === "9999-12-31T23:59:59.997")
+          setSubs(activeSubs);
         })
     );
   };
