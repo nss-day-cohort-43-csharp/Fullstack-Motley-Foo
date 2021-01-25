@@ -24,5 +24,6 @@ namespace Tabloid_Fullstack.Data
         public DbSet<Tag> Tag { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<PostTag> PostTag { get; set; }
+        public DbSet<Subscription> Subscription { get; set; }
     }
 }
