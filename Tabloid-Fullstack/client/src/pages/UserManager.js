@@ -14,7 +14,7 @@ const UserManager = () => {
   const admin = isAdmin();
 
   useEffect(() => {
-    getAllUserProfiles();
+    getAllUserProfiles()
   }, []);
 
 
@@ -35,7 +35,7 @@ const UserManager = () => {
               if (user.active === true) {
                 return (
                   <ListGroupItem key={user.id}>
-                    <UserCard user={user} />
+                    <UserCard user={user} users={users} />
                   </ListGroupItem>)
               }
             })}

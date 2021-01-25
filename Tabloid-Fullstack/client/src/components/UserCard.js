@@ -3,7 +3,7 @@ import { Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reacts
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from "../providers/UserProfileProvider"
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, users }) => {
 
   const [pendingDelete, setPendingDelete] = useState(false);
   const [pendingChange, setPendingChange] = useState(false);
@@ -14,10 +14,29 @@ const UserCard = ({ user }) => {
   }
 
   const changeUserType = () => {
+    let admins = []
+    users.map((profile) => {
+      if (profile.userTypeId === 1) {
+        admins.push(profile)
+      }
+    })
     if (user.userTypeId === 1) {
-      user.userTypeId = 2
-    } else {
+      if (admins.length <= 1) {
+        alert("no")
+        console.log(user)
+        deactivateUser(user);
+        setPendingChange(false);
+      }
+      else {
+        user.userTypeId = 2
+        deactivateUser(user);
+        setPendingChange(false);
+      }
+    }
+    else {
       user.userTypeId = 1
+      deactivateUser(user);
+      setPendingChange(false);
     }
   }
 
@@ -104,8 +123,7 @@ const UserCard = ({ user }) => {
           <Button onClick={(e) => setPendingChange(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
-            deactivateUser(user);
-            setPendingChange(false);
+
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
         </ModalFooter>
