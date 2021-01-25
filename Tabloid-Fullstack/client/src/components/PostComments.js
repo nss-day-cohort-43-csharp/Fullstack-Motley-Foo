@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PostComments.css';
 import formatDate from '../utils/dateFormatter';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { toast } from 'react-toastify';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
@@ -16,6 +16,7 @@ const PostComments = () => {
   const [pendingDelete, setPendingDelete] = useState(false);
   const [commentIdForDelete, setCommentIdForDelete] = useState(0);
   const activeUser = getCurrentUser();
+  const history = useHistory();
 
   useEffect(() => {
     getComments();
@@ -101,6 +102,8 @@ const PostComments = () => {
                 {/* You are currently working on how to get this to render more pretty and then capture the right comment id to make the api delete request */}
                 {getCurrentUser().id === comment.userProfileId ? (
                   <Button
+                    size="sm"
+                    className="btn btn-danger"
                     onClick={() => {
                       setCommentSubjectForDelete(comment.subject);
                       setPendingDelete(true);
