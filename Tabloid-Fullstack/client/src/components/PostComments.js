@@ -4,14 +4,17 @@ import formatDate from '../utils/dateFormatter';
 import { useParams } from 'react-router-dom';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { toast } from 'react-toastify';
-import { Button } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 const PostComments = () => {
   const { getToken, getCurrentUser } = useContext(UserProfileContext);
   const { postId } = useParams();
   const [comments, setComments] = useState([]);
+  const [commentSubjectForDelete, setCommentSubjectForDelete] = useState('');
   const [commentSubject, setCommentSubject] = useState('');
   const [commentContent, setCommentContent] = useState('');
+  const [pendingDelete, setPendingDelete] = useState(false);
+  const [commentIdForDelete, setCommentIdForDelete] = useState(0);
   const activeUser = getCurrentUser();
 
   useEffect(() => {
@@ -40,7 +43,6 @@ const PostComments = () => {
       subject: commentSubject,
       content: commentContent,
     };
-    console.log(commentToAdd);
     getToken().then((token) =>
       fetch('/api/comment', {
         method: 'POST',
@@ -55,6 +57,19 @@ const PostComments = () => {
         getComments();
       })
     );
+  };
+
+  const deleteComment = (commentId) => {
+    getToken().then((token) => {
+      fetch(`../api/comment/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(() => {
+        getComments();
+      });
+    });
   };
 
   return (
@@ -83,12 +98,13 @@ const PostComments = () => {
                 <div className="mt-1">
                   <p className="comment-text">{comment.content}</p>
                 </div>
+                {/* You are currently working on how to get this to render more pretty and then capture the right comment id to make the api delete request */}
                 {getCurrentUser().id === comment.userProfileId ? (
                   <Button
                     onClick={() => {
-                      console.log(
-                        `you clicked the delete button on comment ${comment.id}`
-                      );
+                      setCommentSubjectForDelete(comment.subject);
+                      setPendingDelete(true);
+                      setCommentIdForDelete(comment.id);
                     }}
                   >
                     {' '}
@@ -143,6 +159,27 @@ const PostComments = () => {
           </div>
         </div>
       </div>
+      <Modal isOpen={pendingDelete}>
+        <ModalHeader>
+          Delete this comment {commentSubjectForDelete}?
+        </ModalHeader>
+        <ModalBody>
+          Are you sure you want to delete this comment? This action cannot be
+          undone.
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+          <Button
+            className="btn btn-outline-danger"
+            onClick={(e) => {
+              setPendingDelete(false);
+              deleteComment(commentIdForDelete);
+            }}
+          >
+            Yes, Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

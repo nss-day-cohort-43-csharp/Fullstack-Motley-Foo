@@ -42,7 +42,7 @@ namespace Tabloid_Fullstack.Controllers
             return CreatedAtAction("Get", new { id = comment.Id }, comment);
         }
 
-        [HttpDelete()]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id) 
         {
             var user = GetCurrentUserProfile();
