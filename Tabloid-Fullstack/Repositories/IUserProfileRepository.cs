@@ -9,5 +9,6 @@ namespace Tabloid_Fullstack.Repositories
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         List<UserProfile> GetAll();
         void Update(UserProfile userProfile);
+        UserProfile GetByFirebaseUserIdBare(string firebaseUserId);
     }
 }

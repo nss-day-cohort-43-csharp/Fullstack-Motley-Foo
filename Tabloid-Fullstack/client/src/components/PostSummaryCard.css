@@ -14,3 +14,12 @@
   }
 }
 
+.edit-post-button {
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+  color:#919aa1;
+  font-weight: 800;
+  background-color: #343a40;
+  width: 20%;
+}

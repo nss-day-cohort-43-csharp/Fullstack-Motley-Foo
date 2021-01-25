@@ -87,11 +87,29 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUserProfile();
+
+            if (user.Id != post.UserProfileId)
+            {
+                return Unauthorized();
+            }
+
+            _repo.Update(post);
+            return NoContent();
+        }
 
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepo.GetByFirebaseUserId(firebaseUserId);
+            return _userRepo.GetByFirebaseUserIdBare(firebaseUserId);
         }
     }
 }

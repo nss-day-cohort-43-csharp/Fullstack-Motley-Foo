@@ -40,7 +40,7 @@ const PostDetails = () => {
         return res.json();
       })
       .then((data) => {
-        if (data != undefined) {
+        if (data !== undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
           getPostsTags(postId);
