@@ -29,13 +29,20 @@ namespace Tabloid_Fullstack.Controllers
         [HttpGet("getbyuser/{userProfileId}")]
         public IActionResult GetById(int userProfileId)
         {
-            if(GetCurrentUserProfile().Id != userProfileId)
+            if (GetCurrentUserProfile().Id != userProfileId)
             {
                 return null;
             }
 
-            List <Subscription> subs = _subRepo.GetByUserId(userProfileId);
-            return Ok(subs);
+            List<Subscription> subs = _subRepo.GetByUserId(userProfileId);
+            if (subs != null)
+            {
+                return Ok(subs);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [HttpPost]

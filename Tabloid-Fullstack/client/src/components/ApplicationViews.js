@@ -13,7 +13,7 @@ import MyPosts from "../pages/MyPosts"
 import { PostTagProvider } from "../providers/PostTagProvider"
 import UserManager from "../pages/UserManager"
 import DeactiveUserManager from "../pages/DeactiveUserManager"
-import { SubscriptionProvider } from "../providers/SubscriptionProvider"
+import Subscriptions from "../pages/Subscriptions"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -59,13 +59,15 @@ const ApplicationViews = () => {
       </Route>
 
       <Route path="/post/:postId">
-        <SubscriptionProvider>
-          <PostTagProvider>
-            <TagProvider>
-              {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
-            </TagProvider>
-          </PostTagProvider>
-        </SubscriptionProvider>
+        <PostTagProvider>
+          <TagProvider>
+            {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+          </TagProvider>
+        </PostTagProvider>
+      </Route>
+
+      <Route path="/subscriptions">
+        {isLoggedIn ? <Subscriptions /> : <Redirect to="/login" />}
       </Route>
 
       <Route path="/categories">
