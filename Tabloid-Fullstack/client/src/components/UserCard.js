@@ -22,9 +22,8 @@ const UserCard = ({ user, users }) => {
     })
     if (user.userTypeId === 1) {
       if (admins.length <= 1) {
-        alert("no")
+        alert("This action would result in a loss of all admins. You must first designate a new admin before attempting this.")
         console.log(user)
-        deactivateUser(user);
         setPendingChange(false);
       }
       else {
