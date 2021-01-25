@@ -11,6 +11,6 @@ namespace Tabloid_Fullstack.Models.ViewModels
         public List<ReactionCount> ReactionCounts { get; set; }
 
         public List<Comment> Comments { get; set; }
-        public int ReadTime { get; set; }
+        public string ReadTime { get; set; }
     }
 }

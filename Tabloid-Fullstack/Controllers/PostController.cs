@@ -43,9 +43,11 @@ namespace Tabloid_Fullstack.Controllers
                 return NotFound();
             }
 
+
             var reactionCounts = _repo.GetReactionCounts(id);
             var comments = _commentRepo.GetByPostId(id);
-            var readTime = post.Content.Length / 265;
+            var readTime = getPostReadTime(post);
+
             var postDetails = new PostDetails()
             {
                 Post = post,
@@ -112,6 +114,19 @@ namespace Tabloid_Fullstack.Controllers
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return _userRepo.GetByFirebaseUserIdBare(firebaseUserId);
+        }
+
+        private string getPostReadTime(Post post)
+        {
+
+            var readTimeNumber = Math.Floor((double)post.Content.Length / 265);
+            string readTimeString;
+            if (readTimeNumber<= 1)
+            {
+                readTimeString = "A minute";
+            }
+            else { readTimeString = readTimeNumber + " minutes"; }
+            return readTimeString;
         }
     }
 }

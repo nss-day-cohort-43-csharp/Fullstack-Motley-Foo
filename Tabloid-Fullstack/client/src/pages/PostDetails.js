@@ -218,7 +218,7 @@ const PostDetails = () => {
             </div>
                   </div>
                   <div className="col">
-                      {Math.floor(readTime) <= 1 ? ("A minute") : (Math.floor(readTime)+" minutes")}
+                      {readTime}
                   </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
