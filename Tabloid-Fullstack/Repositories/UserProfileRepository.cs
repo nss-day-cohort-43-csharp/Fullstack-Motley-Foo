@@ -27,6 +27,13 @@ namespace Tabloid_Fullstack.Repositories
 
         }
 
+        public UserProfile GetByFirebaseUserIdBare(string firebaseUserId)
+        {
+            return _context.UserProfile                
+                .FirstOrDefault(up => up.FirebaseUserId == firebaseUserId);
+
+        }
+
         public List<UserProfile> GetAll()
         {
             return _context.UserProfile.OrderBy(up => up.DisplayName)

@@ -37,6 +37,7 @@ namespace Tabloid_Fullstack
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<IPostTagRepository, PostTagRepository>();
+            services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
