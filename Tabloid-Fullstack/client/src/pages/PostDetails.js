@@ -30,6 +30,7 @@ const PostDetails = () => {
   const { getToken } = useContext(UserProfileContext);
   const history = useHistory();
 
+    const [readTime, setReadTime] = useState();
   useEffect(() => {
     fetch(`/api/post/${postId}`)
       .then((res) => {
@@ -45,7 +46,8 @@ const PostDetails = () => {
           setReactionCounts(data.reactionCounts);
           getPostsTags(postId);
           getTags();
-          getSubsByUser();
+            getSubsByUser();
+            setReadTime(data.readTime);
         }
       });
   }, [postId]);
@@ -214,7 +216,10 @@ const PostDetails = () => {
               {formatDate(post.publishDateTime)}
               <TrashCan />
             </div>
-          </div>
+                  </div>
+                  <div className="col">
+                      {readTime}
+                  </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {userCheck()}

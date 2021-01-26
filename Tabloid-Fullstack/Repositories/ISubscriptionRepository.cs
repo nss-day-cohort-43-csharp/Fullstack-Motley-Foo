@@ -8,5 +8,6 @@ namespace Tabloid_Fullstack.Repositories
         void Add(Subscription subscription);
         List<Subscription> GetByUserId(int userId);
         void Update(Subscription subscription);
+        public List<Subscription> GetSubscribedPosts(int userId);
     }
 }

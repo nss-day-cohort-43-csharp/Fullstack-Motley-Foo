@@ -8,11 +8,14 @@ export function SubscriptionProvider(props) {
 
   const { getToken } = useContext(UserProfileContext);
   const [subs, setSubs] = useState([]);
-  const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
+  const [hasSubs, setHasSubs] = useState([]);
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+
 
   const getSubsByUser = () => {
+    const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
     getToken().then((token) =>
-      fetch(`${apiUrl}/getbyuser/${userProfileId}`, {
+      fetch(`${apiUrl}/getsubs/${userProfileId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -20,12 +23,44 @@ export function SubscriptionProvider(props) {
       })
         .then((res) => res.json())
         .then((subs) => {
-          setSubs(subs);
+          const activeSubs = subs.filter(sub => sub.endDateTime === "9999-12-31T23:59:59.997")
+          setSubs(activeSubs);
         })
     );
   };
 
+  const checkIfSubs = () => {
+    if (userProfile) {
+      const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
+      getToken().then((token) =>
+        fetch(`${apiUrl}/getbyuser/${userProfileId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            const activeSubs = res.filter(sub => sub.endDateTime === "9999-12-31T23:59:59.997");
+            if (activeSubs.length >= 1) {
+              setHasSubs(true)
+              return true
+            } else {
+              setHasSubs(false)
+              return false
+            }
+          })
+
+      );
+    } else {
+      setHasSubs(false)
+      return false
+    }
+
+  };
+
   const addSub = (post) => {
+    const userProfileId = JSON.parse(localStorage.getItem('userProfile')).id;
     const providerUserProfileId = post.userProfileId;
     const subscriberUserProfileId = userProfileId;
     const sub = {
@@ -65,7 +100,10 @@ export function SubscriptionProvider(props) {
         subs,
         setSubs,
         addSub,
-        updateSub
+        updateSub,
+        checkIfSubs,
+        hasSubs,
+        setHasSubs
       }}
     >
       {props.children}

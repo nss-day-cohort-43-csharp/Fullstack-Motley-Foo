@@ -25,5 +25,12 @@ namespace Tabloid_Fullstack.Data
         public DbSet<Comment> Comment { get; set; }
         public DbSet<PostTag> PostTag { get; set; }
         public DbSet<Subscription> Subscription { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.SubscriberUserProfile)
+                .WithMany(up => up.Subscriptions)
+                .HasForeignKey(s => s.SubscriberUserProfileId);
+        }
     }
 }
