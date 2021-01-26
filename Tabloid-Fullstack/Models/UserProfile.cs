@@ -30,6 +30,7 @@ namespace Tabloid_Fullstack.Models
         public UserType UserType { get; set; }
         public List<Post> Post { get; set; }
         public bool Active { get; set; }
+        public List<Subscription> Subscriptions {get; set;}
 
     }
 }

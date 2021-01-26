@@ -38,7 +38,6 @@ const PostComments = () => {
       subject: commentSubject,
       content: commentContent,
     };
-    console.log(commentToAdd);
     getToken().then((token) =>
       fetch('/api/comment', {
         method: 'POST',
