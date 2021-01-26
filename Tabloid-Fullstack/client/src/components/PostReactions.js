@@ -3,15 +3,35 @@ import { Badge } from 'reactstrap';
 import './PostReaction.css';
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import { useParams, useHistory } from 'react-router-dom';
-
-
+import { toast } from 'react-toastify';
 
 const PostReactions = ({ postReactions }) => {
   const { getToken } = useContext(UserProfileContext);
   const { postId } = useParams();
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem('userProfile'));
+  const [reactionCounts, setReactionCounts] = useState(postReactions);
 
+
+  useEffect(() => {
+    refreshReactions()
+  }, []);
+
+  const refreshReactions = () => {
+    fetch(`/api/post/${postId}`)
+      .then((res) => {
+        if (res.status === 404) {
+          toast.error("This isn't the post you're looking for");
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== undefined) {
+          setReactionCounts(data.reactionCounts);
+        }
+      });
+  }
 
   const createReaction = (event) => {
     const reactionToAdd = event.target.id
@@ -21,7 +41,6 @@ const PostReactions = ({ postReactions }) => {
       postId: parseInt(postId)
     }
     addReaction(newReaction)
-
   }
 
   const addReaction = (newReaction) => {
@@ -34,20 +53,20 @@ const PostReactions = ({ postReactions }) => {
         },
         body: JSON.stringify(newReaction)
       })
-      //.then(history.go(`/post/${postId}`))
+      refreshReactions()
     })
   }
 
   return (
     <div className="center">
-      {postReactions.map((postReaction) => (
+      {reactionCounts.map((postReaction) => (
         <div key={postReaction.reaction.id} className="d-inline-block mx-2">
           <Badge
             pill
             className="p-2 border border-dark post-reaction__pill"
             title={postReaction.reaction.name}
           >
-            <div id={postReaction.reaction.id} onClick={(event) => (createReaction(event), postReaction.count++)}>{postReaction.reaction.emoji} {postReaction.count}</div>
+            <div id={postReaction.reaction.id} onClick={(event) => (createReaction(event))}>{postReaction.reaction.emoji} {postReaction.count}</div>
           </Badge>
         </div>
       ))}
