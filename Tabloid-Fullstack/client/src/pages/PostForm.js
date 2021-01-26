@@ -23,6 +23,29 @@ const PostForm = () => {
         );
     }, []);
 
+    const [imageLoading, setImageLoading] = useState(false)
+
+
+    const uploadImage = async e => {
+        const files = e.target.files
+        setImageLoading(true)
+        const data = new FormData()
+        data.append('file', files[0])
+        data.append('upload_preset', 'vugr9ics')
+        const res = await fetch(
+            'https://api.cloudinary.com/v1_1/dddadzenw/image/upload',
+            {
+                method: "POST",
+                body: data
+            }
+        )
+        const file = await res.json()
+        let image = file.secure_url
+        const newImage = localStorage.setItem("image", image);
+
+        setImageLoading(false)
+    }
+
     const submitPost = (post) => {
         getToken().then((token) => {
             fetch(`/api/post`, {
@@ -35,6 +58,7 @@ const PostForm = () => {
             })
                 .then((res) => res.json())
                 .then((data) => history.push(`/post/${data.id}`))
+                .then(localStorage.removeItem("image"))
         })
     }
 
@@ -53,6 +77,7 @@ const PostForm = () => {
         else {
             newPost.categoryId = parseInt(newPost.categoryId)
             newPost.isApproved = 1
+            newPost.imageLocation = localStorage.getItem("image");
             if (isNaN(newPost.categoryId)) {
                 window.alert("You must select a category for this post!")
             }
@@ -69,20 +94,29 @@ const PostForm = () => {
                 <form id="newPostForm">
                     <fieldset>
                         <div className="form-group">
-                            <label className="new-post-label" htmlFor="newTitle">Title</label>
-                            <input type="text" className="newTitle" id="title" name="newTitle" onChange={handleControlledInputChange} />
+                            <div className='defaultImage'>
+                                <img className='defaultImage' src={localStorage.image ? localStorage.image : 'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'} />
+                            </div>
+                            {imageLoading ? (
+                                <h6 className="loadingImage">Loading...</h6>
+                            ) : <></>}
+                            <br />
+                            <label htmlFor="embedpollfileinput" className="btn btn-block btn-info">
+                                Upload image
+                            </label>
+                            <input hidden type="file" onChange={uploadImage} className="inputfile" id="embedpollfileinput" />
                         </div>
                     </fieldset>
                     <fieldset>
                         <div className="form-group">
-                            <label className="new-post-label" htmlFor="newImg">Image Location</label>
-                            <input type="text" className="newImg" id="imageLocation" name="newImg" onChange={handleControlledInputChange} />
+                            <label className="new-post-label" htmlFor="newTitle">Title</label>
+                            <input type="text" className="newTitle" id="title" name="newTitle" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
                     <fieldset>
                         <div className="form-group">
                             <label className="new-post-label" htmlFor="newCategoryId">Category</label>
-                            <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={handleControlledInputChange}>
+                            <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={(e) => { handleControlledInputChange(e) }}>
                                 <option>Select a category...</option>
                                 {categories.map((category) => {
                                     return <option key={category.id} value={category.id}>{category.name}</option>
@@ -93,16 +127,16 @@ const PostForm = () => {
                     <fieldset>
                         <div className="form-group">
                             <label className="new-post-label" htmlFor="newPublishDateTime">Publishing Date</label>
-                            <input type="date" className="newPublishDataTime" id="publishDateTime" name="newCreateDateTime" onChange={handleControlledInputChange} />
+                            <input type="date" className="newPublishDataTime" id="publishDateTime" name="newCreateDateTime" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
                     <fieldset>
                         <div className="form-group">
                             <label className="new-post-label" htmlFor="newBody">Body</label>
-                            <textarea className="newBody" id="content" name="newBody" onChange={handleControlledInputChange} />
+                            <textarea className="newBody" id="content" name="newBody" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
-                    <button className="submitNewPostBtn" onClick={handleClickSubmitPost}> Submit Post </button>
+                    <button className="submitNewPostBtn" onClick={(e) => { handleClickSubmitPost(e) }}> Submit Post </button>
                 </form>
             </div>
         </section>
