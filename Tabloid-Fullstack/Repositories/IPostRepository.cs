@@ -14,5 +14,6 @@ namespace Tabloid_Fullstack.Repositories
         List<PostSummary> GetByUserProfileId(int id);
         List<ReactionCount> GetReactionCounts(int postId);
         void Update(Post post);
+        List<PostSummary> GetHome();
     }
 }
