@@ -64,24 +64,77 @@ namespace Tabloid_Fullstack.Controllers
             var tags = _repo.GetAll();
             return Ok(tags);
         }
+
         [HttpPut("{id}")]
-        public IActionResult Put(UserProfile userProfile)
+        public IActionResult Put(int id, UserProfile userProfile)
         {
             var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.Id == userProfile.Id)
+            {
+                currentUser.UserTypeId = userProfile.UserTypeId;
+                _repo.Update(currentUser);
+                return NoContent();
+            }
+
 
             if (currentUser.UserTypeId != UserType.ADMIN_ID)
             {
                 return NotFound();
             }
-
-            _repo.Update(userProfile);
-            return NoContent();
+            else
+            {
+                _repo.Update(userProfile);
+                return NoContent();
+            }                                 
         }
+
+        [HttpPut]
+        public IActionResult Put(UserProfile userProfile)
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.Id == userProfile.Id)
+            {
+                currentUser.UserTypeId = userProfile.UserTypeId;
+                _repo.Update(currentUser);
+                return NoContent();
+            }
+
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _repo.Update(userProfile);
+                return NoContent();
+            }
+        }
+
+
+
+
+        //private bool Auth()
+        //{
+        //    var currentUser = GetCurrentUserProfile();
+
+        //    if (currentUser.UserTypeId != UserType.ADMIN_ID)
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        return true;
+        //    }
+        //    //return true;
+        //}
 
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _repo.GetByFirebaseUserId(firebaseUserId);
+            return _repo.GetByFirebaseUserIdBare(firebaseUserId);
         }
     }
 }

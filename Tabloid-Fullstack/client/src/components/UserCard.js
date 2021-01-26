@@ -2,22 +2,61 @@ import React, { useState, useContext } from "react";
 import { Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from "../providers/UserProfileProvider"
+import { useHistory } from "react-router-dom"
 
-const UserCard = ({ user }) => {
-
+const UserCard = ({ user, users }) => {
+  const history = useHistory();
   const [pendingDelete, setPendingDelete] = useState(false);
   const [pendingChange, setPendingChange] = useState(false);
-  const { deactivateUser } = useContext(UserProfileContext);
+  const { deactivateUser, restrictSelf, isAdmin } = useContext(UserProfileContext);
+  const loggedInUserSting = localStorage.getItem("userProfile");
+  const loggedInUser = JSON.parse(loggedInUserSting);
+
+
+
+
 
   const changeUserActivation = () => {
     user.Active = false;
   }
 
   const changeUserType = () => {
+    let admins = []
+    users.map((profile) => {
+      if (profile.userTypeId === 1 && profile.active === true) {
+        admins.push(profile)
+      }
+    })
+
     if (user.userTypeId === 1) {
-      user.userTypeId = 2
-    } else {
+      if (admins.length <= 1) {
+        alert("This action would result in a loss of all admins. You must first designate a new admin before attempting this.")
+        setPendingChange(false);
+      }
+      else {
+        if (loggedInUser.id !== user.id) {
+          user.userTypeId = 2
+          deactivateUser(user);
+          setPendingChange(false);
+        }
+        if (loggedInUser.id === user.id) {
+          user.userTypeId = 2
+          restrictSelf(user);
+          setPendingChange(false);
+
+          loggedInUser.userTypeId = 2
+          console.log(loggedInUser)
+          const userToSet = JSON.stringify(loggedInUser)
+          localStorage.setItem("userProfile", userToSet)
+          history.go("/explore")
+
+        }
+      }
+    }
+    else if (user.userTypeId == 2) {
       user.userTypeId = 1
+      deactivateUser(user);
+      setPendingChange(false);
     }
   }
 
@@ -43,7 +82,6 @@ const UserCard = ({ user }) => {
       )
     }
   }
-
 
   return (
     <>
@@ -105,7 +143,7 @@ const UserCard = ({ user }) => {
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
             deactivateUser(user);
-            setPendingChange(false);
+            setPendingChange(true)
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
         </ModalFooter>

@@ -1,35 +1,48 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PostComments.css';
 import formatDate from '../utils/dateFormatter';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { toast } from 'react-toastify';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 const PostComments = () => {
   const { getToken, getCurrentUser } = useContext(UserProfileContext);
   const { postId } = useParams();
   const [comments, setComments] = useState([]);
+  const [commentSubjectForDelete, setCommentSubjectForDelete] = useState('');
   const [commentSubject, setCommentSubject] = useState('');
   const [commentContent, setCommentContent] = useState('');
+  const [pendingDelete, setPendingDelete] = useState(false);
+  const [commentIdForDelete, setCommentIdForDelete] = useState(0);
+  const activeUser = getCurrentUser();
+  const history = useHistory();
 
   useEffect(() => {
     getComments();
   }, []);
 
   const getComments = () => {
-    fetch(`/api/comment/${postId}`)
-      .then((res) => {
-        if (res.status === 404) {
-          toast.error('Oops something went wrong with comment api');
-          return;
-        }
-        return res.json();
+    getToken().then((token) =>
+      fetch(`/api/comment/${postId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((data) => {
-        if (data != undefined) {
-          setComments(data);
-        }
-      });
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error('Oops something went wrong with comment api');
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data != undefined) {
+            setComments(data);
+          }
+        })
+    );
   };
 
   const saveNewComment = () => {
@@ -52,6 +65,19 @@ const PostComments = () => {
         getComments();
       })
     );
+  };
+
+  const deleteComment = (commentId) => {
+    getToken().then((token) => {
+      fetch(`../api/comment/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(() => {
+        getComments();
+      });
+    });
   };
 
   return (
@@ -80,6 +106,21 @@ const PostComments = () => {
                 <div className="mt-1">
                   <p className="comment-text">{comment.content}</p>
                 </div>
+                {/* You are currently working on how to get this to render more pretty and then capture the right comment id to make the api delete request */}
+                {getCurrentUser().id === comment.userProfileId ? (
+                  <Button
+                    size="sm"
+                    className="btn btn-danger"
+                    onClick={() => {
+                      setCommentSubjectForDelete(comment.subject);
+                      setPendingDelete(true);
+                      setCommentIdForDelete(comment.id);
+                    }}
+                  >
+                    {' '}
+                    Delete{' '}
+                  </Button>
+                ) : null}
               </div>
             </div>
           ))}
@@ -128,6 +169,27 @@ const PostComments = () => {
           </div>
         </div>
       </div>
+      <Modal isOpen={pendingDelete}>
+        <ModalHeader>
+          Delete this comment {commentSubjectForDelete}?
+        </ModalHeader>
+        <ModalBody>
+          Are you sure you want to delete this comment? This action cannot be
+          undone.
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={(e) => setPendingDelete(false)}>No, Cancel</Button>
+          <Button
+            className="btn btn-outline-danger"
+            onClick={(e) => {
+              setPendingDelete(false);
+              deleteComment(commentIdForDelete);
+            }}
+          >
+            Yes, Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
