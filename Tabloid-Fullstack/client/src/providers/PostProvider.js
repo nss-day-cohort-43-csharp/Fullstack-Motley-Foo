@@ -10,11 +10,36 @@ export function PostProvider(props) {
   const [posts, setPosts] = useState([]);
 
   const getPostsByUserId = (id) => {
-    fetch(`/api/post/getbyuser/${id}`)
-      .then((res) => res.json())
-      .then((resp) => {
-        setPosts(resp);
-      });
+    getToken().then((token) =>
+      fetch(`${apiUrl}/getbyuser/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((posts) => {
+          setPosts(posts);
+        }
+        )
+    );
+  };
+
+  const getPostsByTagId = (id) => {
+    getToken().then((token) =>
+      fetch(`${apiUrl}/getbytag/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const postsToUse = res.map(r => { return r.post })
+          setPosts(postsToUse)
+        }
+        )
+    );
   };
 
   return (
@@ -22,7 +47,8 @@ export function PostProvider(props) {
       value={{
         getPostsByUserId,
         setPosts,
-        posts
+        posts,
+        getPostsByTagId
       }}
     >
       {props.children}

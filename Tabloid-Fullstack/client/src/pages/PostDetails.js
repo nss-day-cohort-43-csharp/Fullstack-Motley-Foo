@@ -22,32 +22,37 @@ const PostDetails = () => {
     PostTagContext
   );
   const { tags, getTags, setTags, getTagById } = useContext(TagContext);
-  const { getCurrentUser } = useContext(UserProfileContext);
+  const { getCurrentUser, getToken } = useContext(UserProfileContext);
   const { subs, getSubsByUser, addSub, updateSub } = useContext(SubscriptionContext);
   const tagToSave = useRef(null);
 
   const currentUser = getCurrentUser();
-  const { getToken } = useContext(UserProfileContext);
   const history = useHistory();
 
-    const [readTime, setReadTime] = useState();
+  const [readTime, setReadTime] = useState();
   useEffect(() => {
-    fetch(`/api/post/${postId}`)
-      .then((res) => {
-        if (res.status === 404) {
-          toast.error("This isn't the post you're looking for");
-          return;
-        }
-        return res.json();
+    getToken().then((token) =>
+      fetch(`/api/post/${postId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error("This isn't the post you're looking for");
+            return;
+          }
+          return res.json();
+        }))
       .then((data) => {
         if (data !== undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
           getPostsTags(postId);
           getTags();
-            getSubsByUser();
-            setReadTime(data.readTime);
+          getSubsByUser();
+          setReadTime(data.readTime);
         }
       });
   }, [postId]);
@@ -216,10 +221,10 @@ const PostDetails = () => {
               {formatDate(post.publishDateTime)}
               <TrashCan />
             </div>
-                  </div>
-                  <div className="col">
-                      {readTime}
-                  </div>
+          </div>
+          <div className="col">
+            {readTime}
+          </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {userCheck()}
