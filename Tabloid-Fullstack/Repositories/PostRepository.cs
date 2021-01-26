@@ -126,5 +126,14 @@ namespace Tabloid_Fullstack.Repositories
                 })
                 .ToList();
         }
+
+        public List<PostTag> GetByTagId(int tagId)
+        {
+            return _context.PostTag
+                .Where(pt => pt.TagId == tagId)
+                .Include(pt => pt.Post).ThenInclude(p => p.Category)
+                .Include(pt => pt.Post.UserProfile)
+                .ToList();
+        }
     }
 }

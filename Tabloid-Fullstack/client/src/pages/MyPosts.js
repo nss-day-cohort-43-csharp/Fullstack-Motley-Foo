@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PostList from "../components/PostList";
 import './MyPosts.css';
+import { UserProfileContext } from "../providers/UserProfileProvider"
 
 const MyPosts = () => {
     const [posts, setPosts] = useState([]);
+    const { getToken } = useContext(UserProfileContext);
     const user = JSON.parse(localStorage.getItem('userProfile'));
 
     useEffect(() => {
-        fetch(`/api/post/getbyuser/${user.id}`)
+        getToken().then((token) =>
+            fetch(`/api/post/getbyuser/${user.id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }))
             .then((res) => res.json())
             .then((posts) => {
                 setPosts(posts);

@@ -15,6 +15,8 @@ import { PostTagProvider } from "../providers/PostTagProvider"
 import UserManager from "../pages/UserManager"
 import DeactiveUserManager from "../pages/DeactiveUserManager"
 import Subscriptions from "../pages/Subscriptions"
+import TagPostList from "../pages/TagPostList"
+import { PostProvider } from "../providers/PostProvider"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -56,7 +58,9 @@ const ApplicationViews = () => {
         {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
       </Route>
       <Route path="/explore">
-        {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
+        <TagProvider>
+          {isLoggedIn ? <Explore /> : <Redirect to="/login" />}
+        </TagProvider>
       </Route>
 
       <Route path="/post/:postId">
@@ -65,6 +69,14 @@ const ApplicationViews = () => {
             {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
           </TagProvider>
         </PostTagProvider>
+      </Route>
+
+      <Route path="/search/tag/:tagId">
+        <PostProvider>
+          <TagProvider>
+            {isLoggedIn ? <TagPostList /> : <Redirect to="/login" />}
+          </TagProvider>
+        </PostProvider>
       </Route>
 
       <Route path="/subscriptions">
