@@ -16,19 +16,26 @@ const PostReactions = ({ postReactions }) => {
   }, []);
 
   const refreshReactions = () => {
-    fetch(`/api/post/${postId}`)
-      .then((res) => {
-        if (res.status === 404) {
-          toast.error("This isn't the post you're looking for");
-          return;
-        }
-        return res.json();
+    getToken().then((token) => {
+      fetch(`/api/post/${postId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((data) => {
-        if (data !== undefined) {
-          setReactionCounts(data.reactionCounts);
-        }
-      });
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error("This isn't the post you're looking for");
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data !== undefined) {
+            setReactionCounts(data.reactionCounts);
+          }
+        });
+    })
   }
 
   const createReaction = (event) => {
