@@ -23,19 +23,26 @@ const PostComments = () => {
   }, []);
 
   const getComments = () => {
-    fetch(`/api/comment/${postId}`)
-      .then((res) => {
-        if (res.status === 404) {
-          toast.error('Oops something went wrong with comment api');
-          return;
-        }
-        return res.json();
+    getToken().then((token) =>
+      fetch(`/api/comment/${postId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((data) => {
-        if (data != undefined) {
-          setComments(data);
-        }
-      });
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error('Oops something went wrong with comment api');
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data != undefined) {
+            setComments(data);
+          }
+        })
+    );
   };
 
   const saveNewComment = () => {
