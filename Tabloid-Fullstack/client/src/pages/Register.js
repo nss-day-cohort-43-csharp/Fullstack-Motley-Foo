@@ -64,6 +64,7 @@ const Register = () => {
         setLoading(false);
         toast.info(`Welcome ${user.displayName}`);
         history.push("/");
+        localStorage.removeItem("image")
       })
       .catch((err) => {
         setLoading(false);

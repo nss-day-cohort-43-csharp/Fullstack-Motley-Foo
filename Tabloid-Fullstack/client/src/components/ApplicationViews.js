@@ -17,6 +17,8 @@ import DeactiveUserManager from "../pages/DeactiveUserManager"
 import Subscriptions from "../pages/Subscriptions"
 import TagPostList from "../pages/TagPostList"
 import { PostProvider } from "../providers/PostProvider"
+import Home from "../pages/Home";
+
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -52,7 +54,7 @@ const ApplicationViews = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        {isLoggedIn ? <p>Home</p> : <Redirect to="/login" />}
+        {isLoggedIn ? <Home /> : <Redirect to="/login" />}
       </Route>
       <Route path="/myposts">
         {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
