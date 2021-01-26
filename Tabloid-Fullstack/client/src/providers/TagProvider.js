@@ -25,6 +25,22 @@ export function TagProvider(props) {
     );
   };
 
+  const getActiveTags = () => {
+    getToken().then((token) =>
+      fetch(`/api/tag/active/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((tags) => {
+          setTags(tags);
+        }
+        )
+    );
+  };
+
   const getTagById = (id) => {
     return getToken().then((token) =>
       fetch(`/api/tag/${id}`, {
@@ -72,7 +88,8 @@ export function TagProvider(props) {
         getTags,
         tags,
         setTags,
-        getTagById
+        getTagById,
+        getActiveTags
       }}
     >
       {props.children}

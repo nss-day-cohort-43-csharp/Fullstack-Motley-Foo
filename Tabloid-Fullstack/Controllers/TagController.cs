@@ -39,6 +39,13 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(tag);
         }
 
+        [HttpGet("active/")]
+        public IActionResult GetActiveTags()
+        {
+            var tags = _tagRepo.GetActiveTags();
+            return Ok(tags);
+        }
+
         [HttpPost]
         public IActionResult Post(Tag tag)
         {
