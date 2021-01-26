@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using Tabloid_Fullstack.Repositories;
 
 namespace Tabloid_Fullstack.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CommentController : ControllerBase
@@ -40,6 +42,22 @@ namespace Tabloid_Fullstack.Controllers
             comment.CreateDateTime = DateTime.Now;
             _commentRepo.Add(comment);
             return CreatedAtAction("Get", new { id = comment.Id }, comment);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) 
+        {
+            var user = GetCurrentUserProfile();
+            var commentToDelete = _commentRepo.GetByCommentId(id);
+
+            if (commentToDelete.UserProfileId != user.Id)
+            {
+                return Unauthorized();
+            }
+
+            _commentRepo.Delete(id);
+            return NoContent();
+
         }
         
         //this is a tool to simply get the current user.
