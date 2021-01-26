@@ -3,7 +3,8 @@ import { Badge } from 'reactstrap';
 import './PostReaction.css';
 
 const addReaction = (event) => {
-  console.log(event.target)
+  const reactionToAdd = event.target.id
+  console.log(reactionToAdd)
 }
 
 const PostReactions = ({ postReactions }) => {
@@ -16,7 +17,7 @@ const PostReactions = ({ postReactions }) => {
             className="p-2 border border-dark post-reaction__pill"
             title={postReaction.reaction.name}
           >
-            <div onClick={(event) => (addReaction(event))}>{postReaction.reaction.emoji} {postReaction.count}</div>
+            <div id={postReaction.reaction.id} onClick={(event) => (addReaction(event))}>{postReaction.reaction.emoji} {postReaction.count}</div>
           </Badge>
         </div>
       ))}
