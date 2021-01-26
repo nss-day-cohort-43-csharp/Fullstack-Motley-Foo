@@ -23,7 +23,7 @@ const UserCard = ({ user, users }) => {
   const changeUserType = () => {
     let admins = []
     users.map((profile) => {
-      if (profile.userTypeId === 1) {
+      if (profile.userTypeId === 1 && profile.active === true) {
         admins.push(profile)
       }
     })
@@ -142,8 +142,8 @@ const UserCard = ({ user, users }) => {
           <Button onClick={(e) => setPendingChange(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
-
-
+            deactivateUser(user);
+            setPendingChange(true)
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
         </ModalFooter>

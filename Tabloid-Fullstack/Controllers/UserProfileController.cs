@@ -65,6 +65,30 @@ namespace Tabloid_Fullstack.Controllers
             return Ok(tags);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, UserProfile userProfile)
+        {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.Id == userProfile.Id)
+            {
+                currentUser.UserTypeId = userProfile.UserTypeId;
+                _repo.Update(currentUser);
+                return NoContent();
+            }
+
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _repo.Update(userProfile);
+                return NoContent();
+            }                                 
+        }
+
         [HttpPut]
         public IActionResult Put(UserProfile userProfile)
         {
@@ -87,26 +111,25 @@ namespace Tabloid_Fullstack.Controllers
                 _repo.Update(userProfile);
                 return NoContent();
             }
-
-            
-           
-                        
         }
 
-        private bool Auth()
-        {
-            var currentUser = GetCurrentUserProfile();
 
-            if (currentUser.UserTypeId != UserType.ADMIN_ID)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-            //return true;
-        }
+
+
+        //private bool Auth()
+        //{
+        //    var currentUser = GetCurrentUserProfile();
+
+        //    if (currentUser.UserTypeId != UserType.ADMIN_ID)
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        return true;
+        //    }
+        //    //return true;
+        //}
 
         private UserProfile GetCurrentUserProfile()
         {
