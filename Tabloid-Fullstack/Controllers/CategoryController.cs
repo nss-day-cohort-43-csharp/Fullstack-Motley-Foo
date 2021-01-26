@@ -50,14 +50,27 @@ namespace Tabloid_Fullstack.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var currentUser = GetCurrentUserProfile();
+
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return Unauthorized();
+            }
             _categoryRepo.deleteCategory(id);
             return NoContent();
         }
-        //[HttpPut("{id}")]
-        //public IActionResult Edit(int id)
-        //{
+        [HttpPut("{id}")]
+        public IActionResult Edit(Category category, int id)
+        {
+            var currentUser = GetCurrentUserProfile();
 
-        //}
+            if (currentUser.UserTypeId != UserType.ADMIN_ID)
+            {
+                return Unauthorized();
+            }
+            _categoryRepo.editCategory(category, id);
+            return NoContent();
+        }
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

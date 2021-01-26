@@ -35,9 +35,14 @@ namespace Tabloid_Fullstack.Repositories
                 _context.SaveChanges();
             }
         }
-        public void editCategory(int id)
+        public void editCategory(Category category, int id)
         {
-
+            Category cat = _context.Category.FirstOrDefault(c => c.Id == id);
+            if (cat!= null&&category.Name!=null)
+            {
+                cat.Name = category.Name;
+                _context.SaveChanges();
+            }
         }
     }
 }

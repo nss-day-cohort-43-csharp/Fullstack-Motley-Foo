@@ -64,6 +64,21 @@ const CategoryManager = () => {
         );
     };
 
+    const editCategory = (id, name) => {
+        getToken().then((token) =>
+            fetch(`/api/category/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(name),
+            }).then(() => {
+                getCategories();
+            })
+            )
+    };
+
     return (
     <>
         {admin?(
@@ -81,7 +96,7 @@ const CategoryManager = () => {
                             <ListGroup>
                                 {categories.map((category) => (
                                     <ListGroupItem key={category.id}>
-                                        <Category category={category} delete={deleteCategory}/>
+                                        <Category category={category} delete={deleteCategory} edit={editCategory} />
                                     </ListGroupItem>
                                 ))}
                             </ListGroup>
