@@ -44,6 +44,29 @@ namespace Tabloid_Fullstack.Controllers
             return CreatedAtAction("Get", new { id = comment.Id }, comment);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Comment comment)
+        {
+            if (id != comment.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUserProfile();
+            if (user.Id != comment.UserProfileId)
+            {
+                return Unauthorized();
+            }
+
+            var existingComment = _commentRepo.GetByCommentId(comment.Id);
+
+            existingComment.Content = comment.Content;
+            existingComment.Subject = comment.Subject;
+
+            _commentRepo.Update(existingComment);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id) 
         {

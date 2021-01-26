@@ -19,7 +19,8 @@ const PostComments = () => {
   const [isEditing, setIsEditing] = useState(false);
   // This is state used for deleting comments
   const [pendingDelete, setPendingDelete] = useState(false);
-  const [commentIdForDelete, setCommentIdForDelete] = useState(0);
+  // This is holding the comment's id so we can pass it on in the api call
+  const [commentIdForDeleteOrEdit, setCommentIdForDeleteOrEdit] = useState(0);
 
   useEffect(() => {
     getComments();
@@ -70,6 +71,34 @@ const PostComments = () => {
     );
   };
 
+  const editComment = (commentId) => {
+    const user = getCurrentUser();
+    const commentToEdit = {
+      id: commentId,
+      postId: postId,
+      subject: EditCommentSubject,
+      content: EditCommentContent,
+      userProfileId: user.id,
+    };
+    console.log(commentToEdit);
+
+    getToken().then((token) => {
+      fetch(`/api/comment/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(commentToEdit),
+      }).then(() => {
+        setCommentSubject('');
+        setCommentContent('');
+        getComments();
+        setCommentIdForDeleteOrEdit(0);
+      });
+    });
+  };
+
   const deleteComment = (commentId) => {
     getToken().then((token) => {
       fetch(`../api/comment/${commentId}`, {
@@ -79,12 +108,53 @@ const PostComments = () => {
         },
       }).then(() => {
         getComments();
+        setCommentIdForDeleteOrEdit(0);
       });
     });
   };
 
   return (
     <div className="container mt-5">
+      <div className="d-flex flex-column comment-section">
+        <div className="p-2">
+          <div className="d-flex align-items-start" style={{ height: '47px' }}>
+            <textarea
+              value={commentSubject}
+              placeholder="Comment Subject"
+              className="form-control ml-2 mb-1 shadow-none border textarea subject-text-field"
+              onChange={(e) => setCommentSubject(e.target.value)}
+              style={{ height: '47px' }}
+            ></textarea>
+          </div>
+          <div className="d-flex flex-row align-items-start">
+            <textarea
+              value={commentContent}
+              placeholder="Comment Content"
+              className="form-control ml-2 mt-1 shadow-none border textarea"
+              onChange={(e) => setCommentContent(e.target.value)}
+            ></textarea>
+          </div>
+          <div className="mt-2 text-right">
+            <button
+              className="btn btn-primary btn-sm shadow-none"
+              type="button"
+              onClick={saveNewComment}
+            >
+              Post comment
+            </button>
+            <button
+              className="btn btn-outline-primary btn-sm ml-1 shadow-none"
+              type="button"
+              onClick={(click) => {
+                setCommentContent('');
+                setCommentSubject('');
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="d-flex justify-content-center row">
         <div className="col-md-8">
           {comments.map((comment) => (
@@ -117,7 +187,7 @@ const PostComments = () => {
                       onClick={() => {
                         setCommentSubjectForDelete(comment.subject);
                         setPendingDelete(true);
-                        setCommentIdForDelete(comment.id);
+                        setCommentIdForDeleteOrEdit(comment.id);
                       }}
                     >
                       {' '}
@@ -129,6 +199,7 @@ const PostComments = () => {
                       onClick={() => {
                         setEditCommentSubject(comment.subject);
                         setEditCommentContent(comment.content);
+                        setCommentIdForDeleteOrEdit(comment.id);
                         console.log(
                           `You just set the editing states. SUBJECT: ${EditCommentSubject} CONTENT: ${EditCommentContent}`
                         );
@@ -143,49 +214,6 @@ const PostComments = () => {
               </div>
             </div>
           ))}
-          <div className="d-flex flex-column comment-section">
-            <div className="p-2">
-              <div
-                className="d-flex align-items-start"
-                style={{ height: '47px' }}
-              >
-                <textarea
-                  value={commentSubject}
-                  placeholder="Comment Subject"
-                  className="form-control ml-2 mb-1 shadow-none border textarea subject-text-field"
-                  onChange={(e) => setCommentSubject(e.target.value)}
-                  style={{ height: '47px' }}
-                ></textarea>
-              </div>
-              <div className="d-flex flex-row align-items-start">
-                <textarea
-                  value={commentContent}
-                  placeholder="Comment Content"
-                  className="form-control ml-2 mt-1 shadow-none border textarea"
-                  onChange={(e) => setCommentContent(e.target.value)}
-                ></textarea>
-              </div>
-              <div className="mt-2 text-right">
-                <button
-                  className="btn btn-primary btn-sm shadow-none"
-                  type="button"
-                  onClick={saveNewComment}
-                >
-                  Post comment
-                </button>
-                <button
-                  className="btn btn-outline-primary btn-sm ml-1 shadow-none"
-                  type="button"
-                  onClick={(click) => {
-                    setCommentContent('');
-                    setCommentSubject('');
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       {/* This is the modal for deleting a comment. */}
@@ -203,7 +231,7 @@ const PostComments = () => {
             className="btn btn-outline-danger"
             onClick={(e) => {
               setPendingDelete(false);
-              deleteComment(commentIdForDelete);
+              deleteComment(commentIdForDeleteOrEdit);
             }}
           >
             Yes, Delete
@@ -244,10 +272,12 @@ const PostComments = () => {
                     console.log('You clicked the edit comment modal button');
                     console.log(EditCommentSubject);
                     console.log(EditCommentContent);
+                    console.log(commentIdForDeleteOrEdit);
+                    editComment(commentIdForDeleteOrEdit);
                     setIsEditing(false);
                   }}
                 >
-                  Edit comment
+                  Save Edit{' '}
                 </button>
                 <button
                   className="btn btn-outline-primary btn-sm ml-1 shadow-none"
