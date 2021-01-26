@@ -8,5 +8,6 @@ namespace Tabloid_Fullstack.Repositories
         List<Category> Get();
         void Add(Category category);
         void deleteCategory(int id);
+        void editCategory(Category category, int id);
     }
 }

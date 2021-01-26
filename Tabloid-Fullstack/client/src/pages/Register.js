@@ -5,6 +5,7 @@ import { Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import "./Login.css";
+import "./Register.css"
 
 const Register = () => {
   const { register } = useContext(UserProfileContext);
@@ -17,6 +18,30 @@ const Register = () => {
   const [confirm, setConfirm] = useState("");
   const history = useHistory();
 
+  const [imageLoading, setImageLoading] = useState(false)
+
+
+  const uploadImage = async e => {
+    const files = e.target.files
+    setImageLoading(true)
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'vugr9ics')
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/dddadzenw/image/upload',
+      {
+        method: "POST",
+        body: data
+      }
+    )
+    const file = await res.json()
+    let image = file.secure_url
+    localStorage.setItem("image", image)
+
+    setImageLoading(false)
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,11 +51,13 @@ const Register = () => {
     }
 
     setLoading(true);
+    const imageLocation = localStorage.getItem("image")
     const profile = {
       firstName,
       lastName,
       displayName,
       email,
+      imageLocation
     };
     register(profile, password)
       .then((user) => {
@@ -51,6 +78,22 @@ const Register = () => {
           <img src="/quill.png" alt="Avatar" />
         </div>
         <h2 className="text-center">User Register</h2>
+        <div className="form-group">
+          <div className='defaultImage'>
+            <img className='defaultImage' src={localStorage.image ? localStorage.image : 'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'} />
+          </div>
+
+          {imageLoading ? (
+            <h6 className="loadingImage">Loading...</h6>
+          ) : <></>}
+
+
+          <br />
+          <label htmlFor="embedpollfileinput" className="btn btn-block btn-info">
+            Upload image
+          </label>
+          <input hidden type="file" onChange={uploadImage} className="inputfile" id="embedpollfileinput" />
+        </div>
         <div className="form-group">
           <Input
             onChange={(e) => setFirstName(e.target.value)}
