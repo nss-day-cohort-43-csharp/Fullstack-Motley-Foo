@@ -11,7 +11,7 @@ import UserCard from "../components/UserCard"
 const UserManager = () => {
   const { isAdmin, getAllUserProfiles, users } = useContext(UserProfileContext);
   const history = useHistory();
-  const admin = isAdmin();
+  //const admin = isAdmin();
 
   useEffect(() => {
     getAllUserProfiles()

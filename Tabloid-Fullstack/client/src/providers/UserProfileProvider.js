@@ -126,7 +126,7 @@ export function UserProfileProvider(props) {
 
   const deactivateUser = (user) => {
     getToken().then((token) =>
-      fetch(`${apiUrl}/${user.id}`, {
+      fetch(`${apiUrl}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -134,6 +134,19 @@ export function UserProfileProvider(props) {
         },
         body: JSON.stringify(user),
       }).then(getAllUserProfiles)
+    )
+  };
+
+  const restrictSelf = (user) => {
+    getToken().then((token) =>
+      fetch(`${apiUrl}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user),
+      })
     )
   };
 
@@ -165,7 +178,8 @@ export function UserProfileProvider(props) {
         setUsers,
         deactivateUser,
         getAllDeactiveUserProfiles,
-        activateUser
+        activateUser,
+        restrictSelf
       }}
     >
       {isFirebaseReady ? (

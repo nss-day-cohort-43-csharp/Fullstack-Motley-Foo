@@ -2,12 +2,19 @@ import React, { useState, useContext } from "react";
 import { Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import formatDate from "../utils/dateFormatter";
 import { UserProfileContext } from "../providers/UserProfileProvider"
+import { useHistory } from "react-router-dom"
 
 const UserCard = ({ user, users }) => {
-
+  const history = useHistory();
   const [pendingDelete, setPendingDelete] = useState(false);
   const [pendingChange, setPendingChange] = useState(false);
-  const { deactivateUser } = useContext(UserProfileContext);
+  const { deactivateUser, restrictSelf, isAdmin } = useContext(UserProfileContext);
+  const loggedInUserSting = localStorage.getItem("userProfile");
+  const loggedInUser = JSON.parse(loggedInUserSting);
+
+
+
+
 
   const changeUserActivation = () => {
     user.Active = false;
@@ -20,19 +27,33 @@ const UserCard = ({ user, users }) => {
         admins.push(profile)
       }
     })
+
     if (user.userTypeId === 1) {
       if (admins.length <= 1) {
         alert("This action would result in a loss of all admins. You must first designate a new admin before attempting this.")
-        console.log(user)
         setPendingChange(false);
       }
       else {
-        user.userTypeId = 2
-        deactivateUser(user);
-        setPendingChange(false);
+        if (loggedInUser.id !== user.id) {
+          user.userTypeId = 2
+          deactivateUser(user);
+          setPendingChange(false);
+        }
+        if (loggedInUser.id === user.id) {
+          user.userTypeId = 2
+          restrictSelf(user);
+          setPendingChange(false);
+
+          loggedInUser.userTypeId = 2
+          console.log(loggedInUser)
+          const userToSet = JSON.stringify(loggedInUser)
+          localStorage.setItem("userProfile", userToSet)
+          history.go("/explore")
+
+        }
       }
     }
-    else {
+    else if (user.userTypeId == 2) {
       user.userTypeId = 1
       deactivateUser(user);
       setPendingChange(false);
@@ -61,7 +82,6 @@ const UserCard = ({ user, users }) => {
       )
     }
   }
-
 
   return (
     <>
@@ -122,6 +142,7 @@ const UserCard = ({ user, users }) => {
           <Button onClick={(e) => setPendingChange(false)}>No, Cancel</Button>
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
+
 
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
