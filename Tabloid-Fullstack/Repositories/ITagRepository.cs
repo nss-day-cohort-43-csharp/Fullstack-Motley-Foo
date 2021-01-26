@@ -9,5 +9,6 @@ namespace Tabloid_Fullstack.Repositories
         List<Tag> Get();
         public void Update(Tag tag);
         public Tag GetById(int id);
+        public List<Tag> GetActiveTags();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,21 @@ namespace Tabloid_Fullstack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PostController : ControllerBase
     {
 
         private IPostRepository _repo;
         private IUserProfileRepository _userRepo;
         private ICommentRepository _commentRepo;
+        private ITagRepository _tagRepo;
 
-        public PostController(IPostRepository repo, IUserProfileRepository userRepo, ICommentRepository commentRepo)
+        public PostController(IPostRepository repo, IUserProfileRepository userRepo, ICommentRepository commentRepo, ITagRepository tagRepository)
         {
             _repo = repo;
             _userRepo = userRepo;
             _commentRepo = commentRepo;
+            _tagRepo = tagRepository;
         }
 
 
@@ -56,6 +60,24 @@ namespace Tabloid_Fullstack.Controllers
                 ReadTime=readTime
             };
             return Ok(postDetails);
+        }
+
+        [HttpGet("getbytag/{tagId}")]
+        public IActionResult GetByTagId(int tagId)
+        {
+            var tag = _tagRepo.GetById(tagId);
+            if(tag.Active == false)
+            {
+                return NotFound();
+            }
+
+            var posts = _repo.GetByTagId(tagId);
+            if (posts == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(posts);
         }
 
         [HttpGet("getbyuser/{id}")]
@@ -108,6 +130,13 @@ namespace Tabloid_Fullstack.Controllers
 
             _repo.Update(post);
             return NoContent();
+        }
+
+        [HttpGet("Home")]
+        public IActionResult GetHome()
+        {
+            var posts = _repo.GetHome();
+            return Ok(posts);
         }
 
         private UserProfile GetCurrentUserProfile()

@@ -24,6 +24,10 @@ namespace Tabloid_Fullstack.Repositories
         {
             return _context.Tag.FirstOrDefault(p => p.Id == id);
         }
+        public List<Tag> GetActiveTags()
+        {
+            return _context.Tag.Where(c => c.Active == true).ToList();
+        }
         public void Add(Tag tag)
         {
             _context.Add(tag);
