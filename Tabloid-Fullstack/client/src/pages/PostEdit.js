@@ -17,8 +17,6 @@ const PostEdit = () => {
 
     const verifyUser = (data) => {
         const user = JSON.parse(localStorage.getItem('userProfile'));
-        console.log(user.id)
-        console.log(data)
         if (data.post.userProfileId !== user.id) {
             history.push("/myposts")
         }
