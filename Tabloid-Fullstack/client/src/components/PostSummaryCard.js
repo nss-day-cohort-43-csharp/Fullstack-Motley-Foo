@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { Card } from "reactstrap";
 import formatDate from "../utils/dateFormatter";
 import "./PostSummaryCard.css";
+import { useHistory } from "react-router-dom";
 
 const PostSummaryCard = ({ post }) => {
+  const history = useHistory();
 
   const ImageCard = () => {
     if (post.imageLocation === null) {
@@ -26,6 +28,22 @@ const PostSummaryCard = ({ post }) => {
           }}
         ></div>
       )
+    }
+  }
+
+
+  const directToEdit = () => {
+    history.push(`/editpost/${post.id}`)
+  }
+
+  const EditButton = () => {
+    const user = JSON.parse(localStorage.getItem('userProfile'));
+    if (post.authorId === user.id) {
+      return (
+        <div className="ml-5 edit-post-button" onClick={() => { directToEdit() }}>EDIT</div>
+      )
+    } else {
+      return null
     }
   }
 
@@ -51,6 +69,7 @@ const PostSummaryCard = ({ post }) => {
           <p className="ml-5">
             Published on {formatDate(post.publishDateTime)}
           </p>
+          <EditButton />
         </div>
       </div>
     </Card>

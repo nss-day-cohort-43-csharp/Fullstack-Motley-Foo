@@ -75,6 +75,12 @@ namespace Tabloid_Fullstack.Repositories
             _context.SaveChanges();
         }
 
+        public void Update(Post post)
+        {            
+            _context.Entry(post).State = EntityState.Modified;
+            _context.SaveChanges();         
+        }
+
         public void Delete(int id)
         {
             var post = GetById(id);

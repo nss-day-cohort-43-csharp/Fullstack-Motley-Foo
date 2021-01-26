@@ -28,6 +28,16 @@ const Category = (props) => {
     setCategoryEdits("");
     };
 
+    const editCategory = () => {
+        if (categoryEdits.length != 0) {
+            const categoryToChange = { name: categoryEdits }
+            props.edit(category.id, categoryToChange);
+            hideEditForm();
+        } else {
+            showEditForm();
+        }
+    }
+
   return (
     <div className="justify-content-between row">
       {isEditing ? (
@@ -38,8 +48,10 @@ const Category = (props) => {
               onChange={(e) => setCategoryEdits(e.target.value)}
               value={categoryEdits}
             />
-            <ButtonGroup size="sm">
-              <Button onClick={showEditForm}>Save</Button>
+                      <ButtonGroup size="sm">
+                          <Button onClick={() => {
+                              editCategory();
+                          }}>Save</Button>
               <Button outline color="danger" onClick={hideEditForm}>
                 Cancel
               </Button>

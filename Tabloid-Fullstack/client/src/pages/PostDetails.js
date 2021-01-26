@@ -12,6 +12,7 @@ import { TagContext } from '../providers/TagProvider';
 import { Button } from 'reactstrap';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { useHistory } from 'react-router-dom';
+import { SubscriptionContext } from '../providers/SubscriptionProvider'
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -22,12 +23,14 @@ const PostDetails = () => {
   );
   const { tags, getTags, setTags, getTagById } = useContext(TagContext);
   const { getCurrentUser } = useContext(UserProfileContext);
+  const { subs, getSubsByUser, addSub, updateSub } = useContext(SubscriptionContext);
   const tagToSave = useRef(null);
 
   const currentUser = getCurrentUser();
   const { getToken } = useContext(UserProfileContext);
   const history = useHistory();
 
+    const [readTime, setReadTime] = useState();
   useEffect(() => {
     fetch(`/api/post/${postId}`)
       .then((res) => {
@@ -38,11 +41,13 @@ const PostDetails = () => {
         return res.json();
       })
       .then((data) => {
-        if (data != undefined) {
+        if (data !== undefined) {
           setPost(data.post);
           setReactionCounts(data.reactionCounts);
           getPostsTags(postId);
           getTags();
+            getSubsByUser();
+            setReadTime(data.readTime);
         }
       });
   }, [postId]);
@@ -179,6 +184,22 @@ const PostDetails = () => {
     }
   };
 
+  const subChecker = () => {
+    if (subs) {
+      const userRelationship = subs.filter(sub => sub.providerUserProfileId === post.userProfileId)
+      if (userRelationship[0] && userRelationship[0].endDateTime === "9999-12-31T23:59:59.997") {
+        return (<Button onClick={(e) => updateSub(userRelationship[0])}>Unsubscribe</Button>)
+      } else if (userRelationship[0]) {
+        return (<Button onClick={((e) => updateSub(userRelationship[0]))}>Subscribe</Button>)
+      } else {
+        return (<Button onClick={((e) => addSub(post))}>Subscribe</Button>)
+      }
+    }
+    else {
+      return (<Button onClick={((e) => addSub(post))}>Subscribe</Button>)
+    }
+  }
+
   return (
     <div>
       <ImageClip />
@@ -188,13 +209,17 @@ const PostDetails = () => {
         <div className="row">
           <div className="col">
             <p className="d-inline-block">{post.userProfile.displayName}</p>
+            {subChecker()}
           </div>
           <div className="col">
             <div>
               {formatDate(post.publishDateTime)}
               <TrashCan />
             </div>
-          </div>
+                  </div>
+                  <div className="col">
+                      {readTime}
+                  </div>
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {userCheck()}

@@ -10,9 +10,11 @@ import PostForm from "../pages/PostForm";
 import TagManager from "../pages/TagManager"
 import { TagProvider } from "../providers/TagProvider"
 import MyPosts from "../pages/MyPosts"
+import PostEdit from "../pages/PostEdit";
 import { PostTagProvider } from "../providers/PostTagProvider"
 import UserManager from "../pages/UserManager"
 import DeactiveUserManager from "../pages/DeactiveUserManager"
+import Subscriptions from "../pages/Subscriptions"
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
@@ -65,6 +67,13 @@ const ApplicationViews = () => {
         </PostTagProvider>
       </Route>
 
+      <Route path="/subscriptions">
+        {isLoggedIn ? <Subscriptions /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/editpost/:postId">
+        {isLoggedIn ? <PostEdit /> : <Redirect to="/login" />}
+      </Route>
+
       <Route path="/categories">
         {isLoggedIn ? <CategoryManager /> : <Redirect to="/login" />}
       </Route>
@@ -77,8 +86,8 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      {authLevel()}
-    </Switch>
+      { authLevel()}
+    </Switch >
   );
 };
 

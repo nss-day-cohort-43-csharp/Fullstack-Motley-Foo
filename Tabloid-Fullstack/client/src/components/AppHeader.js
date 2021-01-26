@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -12,9 +12,11 @@ import {
   NavbarText,
 } from "reactstrap";
 import { UserProfileContext } from "../providers/UserProfileProvider";
+import { SubscriptionContext } from "../providers/SubscriptionProvider"
 
 const AppHeader = () => {
   const { getCurrentUser, logout, isAdmin } = useContext(UserProfileContext);
+  const { hasSubs, setHasSubs, checkIfSubs } = useContext(SubscriptionContext);
   const user = getCurrentUser();
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +29,8 @@ const AppHeader = () => {
       history.push("/login");
     });
   };
+
+  checkIfSubs();
 
   return (
     <div>
@@ -52,7 +56,15 @@ const AppHeader = () => {
                     <div className="create-new-post">New Post</div>
                   </NavLink>
                 </NavItem>
-
+                {hasSubs && (
+                  <>
+                    <NavItem>
+                      <NavLink to="/subscriptions" tag={Link}>
+                        Subscriptions
+                    </NavLink>
+                    </NavItem>
+                  </>
+                )}
                 <NavItem>
                   <NavLink to="/explore" tag={Link}>
                     Explore

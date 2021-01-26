@@ -43,13 +43,17 @@ namespace Tabloid_Fullstack.Controllers
                 return NotFound();
             }
 
+
             var reactionCounts = _repo.GetReactionCounts(id);
             var comments = _commentRepo.GetByPostId(id);
+            var readTime = getPostReadTime(post);
+
             var postDetails = new PostDetails()
             {
                 Post = post,
                 ReactionCounts = reactionCounts,
-                Comments = comments
+                Comments = comments,
+                ReadTime=readTime
             };
             return Ok(postDetails);
         }
@@ -87,11 +91,42 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUserProfile();
+
+            if (user.Id != post.UserProfileId)
+            {
+                return Unauthorized();
+            }
+
+            _repo.Update(post);
+            return NoContent();
+        }
 
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepo.GetByFirebaseUserId(firebaseUserId);
+            return _userRepo.GetByFirebaseUserIdBare(firebaseUserId);
+        }
+
+        private string getPostReadTime(Post post)
+        {
+
+            var readTimeNumber = Math.Floor((double)post.Content.Length / 265);
+            string readTimeString;
+            if (readTimeNumber<= 1)
+            {
+                readTimeString = "A minute";
+            }
+            else { readTimeString = readTimeNumber + " minutes"; }
+            return readTimeString;
         }
     }
 }

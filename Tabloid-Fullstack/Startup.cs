@@ -37,6 +37,7 @@ namespace Tabloid_Fullstack
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<IPostTagRepository, PostTagRepository>();
+            services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
@@ -57,6 +58,10 @@ namespace Tabloid_Fullstack
                 });
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddControllers()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
