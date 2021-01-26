@@ -110,6 +110,13 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
+        [HttpGet("Home")]
+        public IActionResult GetHome()
+        {
+            var posts = _repo.GetHome();
+            return Ok(posts);
+        }
+
         private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
