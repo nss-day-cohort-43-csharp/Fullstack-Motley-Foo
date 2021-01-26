@@ -2,16 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { Badge } from 'reactstrap';
 import './PostReaction.css';
 import { UserProfileContext } from "../providers/UserProfileProvider";
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const PostReactions = ({ postReactions }) => {
   const { getToken } = useContext(UserProfileContext);
   const { postId } = useParams();
-  const history = useHistory();
   const user = JSON.parse(localStorage.getItem('userProfile'));
   const [reactionCounts, setReactionCounts] = useState(postReactions);
-
 
   useEffect(() => {
     refreshReactions()
