@@ -157,5 +157,25 @@ namespace Tabloid_Fullstack.Repositories
          })
          .ToList();
     }
+    public List<PostSummary> GetUnapprovedPosts()
+    {
+      return _context.Post
+         .Include(p => p.Category)
+         .Where(p => !p.IsApproved)
+         .Where(p => p.PublishDateTime <= DateTime.Now)
+         .OrderBy(p => p.PublishDateTime)
+         .Select(p => new PostSummary()
+         {
+           Id = p.Id,
+           ImageLocation = p.ImageLocation,
+           Title = p.Title,
+           AuthorId = p.UserProfileId,
+           AuthorName = p.UserProfile.DisplayName,
+           AbbreviatedText = p.Content.Substring(0, 200),
+           PublishDateTime = p.PublishDateTime,
+           Category = p.Category
+         })
+         .ToList();
+    }
   }
 }

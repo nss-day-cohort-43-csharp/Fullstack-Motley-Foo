@@ -1,29 +1,32 @@
-import React, { useContext } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import { UserProfileContext, UserProfileProvider } from "../providers/UserProfileProvider";
-import Explore from "../pages/Explore";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import PostDetails from "../pages/PostDetails";
-import CategoryManager from "../pages/CategoryManager";
-import PostForm from "../pages/PostForm";
-import TagManager from "../pages/TagManager"
-import { TagProvider } from "../providers/TagProvider"
-import MyPosts from "../pages/MyPosts"
-import PostEdit from "../pages/PostEdit";
-import { PostTagProvider } from "../providers/PostTagProvider"
-import UserManager from "../pages/UserManager"
-import DeactiveUserManager from "../pages/DeactiveUserManager"
-import Subscriptions from "../pages/Subscriptions"
-import TagPostList from "../pages/TagPostList"
-import { PostProvider } from "../providers/PostProvider"
-import Home from "../pages/Home";
+import React, { useContext } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+  UserProfileContext,
+  UserProfileProvider,
+} from '../providers/UserProfileProvider';
+import Explore from '../pages/Explore';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import PostDetails from '../pages/PostDetails';
+import CategoryManager from '../pages/CategoryManager';
+import PostForm from '../pages/PostForm';
+import TagManager from '../pages/TagManager';
+import { TagProvider } from '../providers/TagProvider';
+import MyPosts from '../pages/MyPosts';
+import PostEdit from '../pages/PostEdit';
+import { PostTagProvider } from '../providers/PostTagProvider';
+import UserManager from '../pages/UserManager';
+import DeactiveUserManager from '../pages/DeactiveUserManager';
+import Subscriptions from '../pages/Subscriptions';
+import TagPostList from '../pages/TagPostList';
+import { PostProvider } from '../providers/PostProvider';
+import Home from '../pages/Home';
+import UnapprovedPosts from '../pages/UnapprovedPost';
 
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 
   const authLevel = () => {
-
     if (isLoggedIn && isAdmin()) {
       return (
         <>
@@ -42,11 +45,17 @@ const ApplicationViews = () => {
               <DeactiveUserManager />
             </Route>
           </UserProfileProvider>
-        </>)
+          <UserProfileProvider>
+            <Route path="/unapprovedPosts">
+              <UnapprovedPosts />
+            </Route>
+          </UserProfileProvider>
+        </>
+      );
     } else if (isLoggedIn && !isAdmin()) {
-      return (<Redirect to="/" />)
+      return <Redirect to="/" />;
     } else {
-      return (<Redirect to="/login" />)
+      return <Redirect to="/login" />;
     }
   };
 
@@ -99,8 +108,8 @@ const ApplicationViews = () => {
       <Route path="/register">
         <Register />
       </Route>
-      { authLevel()}
-    </Switch >
+      {authLevel()}
+    </Switch>
   );
 };
 
