@@ -47,12 +47,28 @@ const PostDetails = () => {
         }))
       .then((data) => {
         if (data !== undefined) {
-          setPost(data.post);
-          setReactionCounts(data.reactionCounts);
-          getPostsTags(postId);
-          getTags();
-          getSubsByUser();
-          setReadTime(data.readTime);
+
+          if (data.post.isApproved === true) {
+            setPost(data.post);
+            setReactionCounts(data.reactionCounts);
+            getPostsTags(postId);
+            getTags();
+            getSubsByUser();
+            setReadTime(data.readTime);
+          }
+          if (data.post.isApproved !== 1) {
+            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === true) {
+              setPost(data.post);
+              setReactionCounts(data.reactionCounts);
+              getPostsTags(postId);
+              getTags();
+              getSubsByUser();
+              setReadTime(data.readTime);
+            }
+            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === false) {
+              toast.error("This isn't the post you're looking for");
+            }
+          }
         }
       });
   }, [postId]);

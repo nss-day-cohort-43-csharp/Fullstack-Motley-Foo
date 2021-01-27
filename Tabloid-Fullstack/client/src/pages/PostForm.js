@@ -75,8 +75,27 @@ const PostForm = () => {
             history.push("/login")
         }
         else {
+
+
+
+
+
+
+            console.log(user)
             newPost.categoryId = parseInt(newPost.categoryId)
-            newPost.isApproved = 1
+
+            if (user.userTypeId === 1) {
+                newPost.isApproved = 1
+            }
+
+            if (user.userTypeId === 2) {
+                newPost.isApproved = 0
+            }
+
+
+
+
+
             newPost.imageLocation = localStorage.getItem("image");
             if (isNaN(newPost.categoryId)) {
                 window.alert("You must select a category for this post!")
@@ -84,6 +103,15 @@ const PostForm = () => {
             else {
                 submitPost(newPost)
             }
+
+
+
+
+
+
+
+
+
         }
     }
 
