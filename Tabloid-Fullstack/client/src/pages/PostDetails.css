@@ -64,6 +64,24 @@
   border-radius: 2rem;
 }
 
-.defaultImage {
-  
+.profilePic{
+  width: 7em;
+  height:auto;
+}
+
+.userProfileInfo{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.subButton {
+  height: 5em;
+}
+
+.imgName {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

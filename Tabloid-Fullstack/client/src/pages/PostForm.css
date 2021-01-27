@@ -44,7 +44,9 @@
     padding-right: 1em;
     background-color: #5FC2AA;
     color: white;
-    border-radius: 18px;
-    
-    
+    border-radius: 18px; 
+}
+
+.hidden{
+    display: none;
 }
