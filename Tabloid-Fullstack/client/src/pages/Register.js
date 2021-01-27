@@ -39,6 +39,11 @@ const Register = () => {
     localStorage.setItem("image", image)
 
     setImageLoading(false)
+    const matches = document.querySelectorAll(".hidden");
+    for (const m of matches) {
+      m.style.display = "block"
+    }
+    document.querySelector(".notHidden").style.display = "none"
   }
 
 
@@ -90,12 +95,12 @@ const Register = () => {
 
 
           <br />
-          <label htmlFor="embedpollfileinput" className="btn btn-block btn-info">
+          <label htmlFor="embedpollfileinput" className="btn btn-block btn-info notHidden">
             Upload image
           </label>
           <input hidden type="file" onChange={uploadImage} className="inputfile" id="embedpollfileinput" />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setFirstName(e.target.value)}
             type="text"
@@ -105,7 +110,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setLastName(e.target.value)}
             type="text"
@@ -115,7 +120,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setDisplayName(e.target.value)}
             type="text"
@@ -125,7 +130,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -135,7 +140,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
@@ -145,7 +150,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Input
             onChange={(e) => setConfirm(e.target.value)}
             type="password"
@@ -155,7 +160,7 @@ const Register = () => {
             required="required"
           />
         </div>
-        <div className="form-group">
+        <div className="form-group hidden">
           <Button type="submit" block color="danger" disabled={loading}>
             Sign Up
           </Button>

@@ -189,6 +189,18 @@ const PostDetails = () => {
     }
   };
 
+  const ProfileImage = () => {
+    if (post.userProfile.imageLocation !== null) {
+      return (
+        <img className="profilePic" src={post.userProfile.imageLocation} />
+      );
+    } else {
+      return (
+        <img className="profilePic" src={'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'} />
+      );
+    }
+  };
+
   const TrashCan = () => {
     const user = JSON.parse(localStorage.getItem('userProfile'));
     if (user.id === post.userProfileId) {
@@ -211,15 +223,15 @@ const PostDetails = () => {
     if (subs) {
       const userRelationship = subs.filter(sub => sub.providerUserProfileId === post.userProfileId)
       if (userRelationship[0] && userRelationship[0].endDateTime === "9999-12-31T23:59:59.997") {
-        return (<Button className="btn btn-outline-danger ml-3 circle" onClick={(e) => updateSub(userRelationship[0])}>Unsubscribe</Button>)
+        return (<Button className="btn btn-outline-danger ml-3 circle subButton" onClick={(e) => updateSub(userRelationship[0])}>Unsubscribe</Button>)
       } else if (userRelationship[0]) {
-        return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => updateSub(userRelationship[0]))}>Subscribe</Button>)
+        return (<Button className="btn btn-danger ml-3 circle subButton" onClick={((e) => updateSub(userRelationship[0]))}>Subscribe</Button>)
       } else {
-        return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => addSub(post))}>Subscribe</Button>)
+        return (<Button className="btn btn-danger ml-3 circle subButton" onClick={((e) => addSub(post))}>Subscribe</Button>)
       }
     }
     else {
-      return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => addSub(post))}>Subscribe</Button>)
+      return (<Button className="btn btn-danger ml-3 circle subButton" onClick={((e) => addSub(post))}>Subscribe</Button>)
     }
   }
 
@@ -230,8 +242,11 @@ const PostDetails = () => {
         <h1>{post.title}</h1>
         <h5 className="text-danger">{post.category.name}</h5>
         <div className="row">
-          <div className="col">
-            <p className="d-inline-block">{post.userProfile.displayName}</p>
+          <div className="col userProfileInfo">
+            <div className="imgName">
+              {ProfileImage()}
+              {post.userProfile.displayName}
+            </div>
             {subChecker()}
           </div>
           <div className="col">
@@ -244,7 +259,7 @@ const PostDetails = () => {
             {readTime}
           </div>
         </div>
-        <div className="text-justify post-details__content">{post.content}</div>
+        <div className="text-justify post-details__content mt-4">{post.content}</div>
         {userCheck()}
         <div className="tags-container mt-4">
           Tags:

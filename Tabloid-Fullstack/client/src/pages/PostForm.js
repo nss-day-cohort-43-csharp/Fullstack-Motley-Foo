@@ -44,6 +44,11 @@ const PostForm = () => {
         const newImage = localStorage.setItem("image", image);
 
         setImageLoading(false)
+        const matches = document.querySelectorAll(".hidden");
+        for (const m of matches) {
+            m.style.display = "block"
+        }
+        document.querySelector(".notHidden").style.display = "none"
     }
 
     const submitPost = (post) => {
@@ -75,7 +80,6 @@ const PostForm = () => {
             history.push("/login")
         }
         else {
-            console.log(user)
             newPost.categoryId = parseInt(newPost.categoryId)
 
             if (user.userTypeId === 1) {
@@ -112,20 +116,20 @@ const PostForm = () => {
                                 <h6 className="loadingImage">Loading...</h6>
                             ) : <></>}
                             <br />
-                            <label htmlFor="embedpollfileinput" className="btn btn-info">
+                            <label htmlFor="embedpollfileinput" className="btn btn-info notHidden">
                                 Upload image
                             </label>
                             <input hidden type="file" onChange={uploadImage} className="inputfile" id="embedpollfileinput" />
                         </div>
                     </fieldset>
                     <fieldset>
-                        <div className="form-group">
+                        <div className="form-group hidden">
                             <label className="new-post-label" htmlFor="newTitle">Title</label>
                             <input type="text" className="newTitle" id="title" name="newTitle" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
                     <fieldset>
-                        <div className="form-group">
+                        <div className="form-group hidden">
                             <label className="new-post-label" htmlFor="newCategoryId">Category</label>
                             <select className="newCategoryId" id="categoryId" name="newCategoryId" onChange={(e) => { handleControlledInputChange(e) }}>
                                 <option>Select a category...</option>
@@ -136,18 +140,18 @@ const PostForm = () => {
                         </div>
                     </fieldset>
                     <fieldset>
-                        <div className="form-group">
+                        <div className="form-group hidden">
                             <label className="new-post-label" htmlFor="newPublishDateTime">Publishing Date</label>
                             <input type="date" className="newPublishDataTime" id="publishDateTime" name="newCreateDateTime" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
                     <fieldset>
-                        <div className="form-group">
+                        <div className="form-group hidden">
                             <label className="new-post-label" htmlFor="newBody">Body</label>
                             <textarea className="newBody" id="content" name="newBody" onChange={(e) => { handleControlledInputChange(e) }} />
                         </div>
                     </fieldset>
-                    <button className="submitNewPostBtn" onClick={(e) => { handleClickSubmitPost(e) }}> Submit Post </button>
+                    <button className="submitNewPostBtn hidden" onClick={(e) => { handleClickSubmitPost(e) }}> Submit Post </button>
                 </form>
             </div>
         </section>

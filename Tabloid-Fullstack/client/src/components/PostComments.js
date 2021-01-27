@@ -82,7 +82,6 @@ const PostComments = () => {
       content: EditCommentContent,
       userProfileId: user.id,
     };
-    console.log(commentToEdit);
 
     getToken().then((token) => {
       fetch(`/api/comment/${commentId}`, {
@@ -202,9 +201,6 @@ const PostComments = () => {
                         setEditCommentSubject(comment.subject);
                         setEditCommentContent(comment.content);
                         setCommentIdForDeleteOrEdit(comment.id);
-                        console.log(
-                          `You just set the editing states. SUBJECT: ${EditCommentSubject} CONTENT: ${EditCommentContent}`
-                        );
                         setIsEditing(true);
                       }}
                     >
@@ -271,10 +267,6 @@ const PostComments = () => {
                   className="btn btn-primary btn-sm shadow-none"
                   type="button"
                   onClick={() => {
-                    console.log('You clicked the edit comment modal button');
-                    console.log(EditCommentSubject);
-                    console.log(EditCommentContent);
-                    console.log(commentIdForDeleteOrEdit);
                     editComment(commentIdForDeleteOrEdit);
                     setIsEditing(false);
                   }}
