@@ -6,13 +6,14 @@ const MySubs = ({ subs }) => {
     for (const post of sub.providerUserProfile.post) {
       post.authorName = sub.providerUserProfile.displayName
     }
+    console.log(sub)
   }
 
   return (
     <div>
       {subs.map((sub) => (
         <div className="col-lg-10 col-xs-12 myposts-posts">
-          <PostList posts={sub.providerUserProfile.post} />
+          <PostList posts={sub.providerUserProfile.post.filter(p => p.isApproved === true)} />
         </div>
       ))}
     </div>
