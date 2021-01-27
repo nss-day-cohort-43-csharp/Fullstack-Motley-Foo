@@ -19,7 +19,6 @@ import TagPostList from "../pages/TagPostList"
 import { PostProvider } from "../providers/PostProvider"
 import Home from "../pages/Home";
 
-
 const ApplicationViews = () => {
   const { isLoggedIn, isAdmin } = useContext(UserProfileContext);
 

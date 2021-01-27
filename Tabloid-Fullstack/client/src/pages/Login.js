@@ -5,8 +5,10 @@ import { Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import "./Login.css";
+import WindowChecker from "../utils/WindowChecker";
 
 const Login = () => {
+  WindowChecker()
   const { login } = useContext(UserProfileContext);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");

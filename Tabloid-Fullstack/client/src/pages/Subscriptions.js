@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SubscriptionContext } from "../providers/SubscriptionProvider"
+import WindowChecker from "../utils/WindowChecker";
 import MySubs from "./MySubs";
 
 
@@ -7,6 +8,7 @@ const Subscriptions = () => {
   const { subs, getSubsByUser } = useContext(SubscriptionContext);
 
   useEffect(() => {
+    WindowChecker()
     getSubsByUser()
   }, []);
 

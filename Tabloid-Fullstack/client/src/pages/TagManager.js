@@ -9,6 +9,7 @@ import {
 import Tag from "../components/Tag";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import { TagContext } from "../providers/TagProvider"
+import WindowChecker from "../utils/WindowChecker";
 
 const TagManager = () => {
   const { getToken } = useContext(UserProfileContext);
@@ -16,6 +17,7 @@ const TagManager = () => {
   const { tags, getTags } = useContext(TagContext);
 
   useEffect(() => {
+    WindowChecker()
     getTags();
   }, []);
 

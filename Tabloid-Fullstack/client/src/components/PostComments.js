@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { toast } from 'react-toastify';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import WindowChecker from '../utils/WindowChecker';
 
 const PostComments = () => {
   const { getToken, getCurrentUser } = useContext(UserProfileContext);
@@ -23,6 +24,7 @@ const PostComments = () => {
   const [commentIdForDeleteOrEdit, setCommentIdForDeleteOrEdit] = useState(0);
 
   useEffect(() => {
+    WindowChecker();
     getComments();
   }, []);
 

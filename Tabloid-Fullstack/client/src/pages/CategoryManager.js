@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import {
-  ListGroup,
-  ListGroupItem,
-  Input,
-  InputGroup,
-  Button,
+    ListGroup,
+    ListGroupItem,
+    Input,
+    InputGroup,
+    Button,
 } from "reactstrap";
 import Category from "../components/Category";
 import { UserProfileContext } from "../providers/UserProfileProvider";
+import WindowChecker from "../utils/WindowChecker";
 
 const CategoryManager = () => {
     const { getToken, isAdmin } = useContext(UserProfileContext);
@@ -18,6 +19,7 @@ const CategoryManager = () => {
     const admin = isAdmin();
 
     useEffect(() => {
+        WindowChecker()
         getCategories();
     }, []);
 
@@ -37,7 +39,7 @@ const CategoryManager = () => {
     };
 
     const saveNewCategory = () => {
-        const categoryToAdd = { name: newCategory};
+        const categoryToAdd = { name: newCategory };
         getToken().then((token) =>
             fetch("/api/category", {
                 method: "POST",
@@ -76,49 +78,49 @@ const CategoryManager = () => {
             }).then(() => {
                 getCategories();
             })
-            )
+        )
     };
 
     return (
-    <>
-        {admin?(
-            <>
-                <div className="container mt-5">
-                    <img
-                        height="100"
-                        src="/quill.png"
-                        alt="Quill Logo"
-                        className="bg-danger rounded-circle"
-                    />
-                    <h1>Category Management</h1>
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-8 col-md-6">
-                            <ListGroup>
-                                {categories.map((category) => (
-                                    <ListGroupItem key={category.id}>
-                                        <Category category={category} delete={deleteCategory} edit={editCategory} />
-                                    </ListGroupItem>
-                                ))}
-                            </ListGroup>
-                            <div className="my-4">
-                                <InputGroup>
-                                    <Input
-                                        onChange={(e) => setNewCategory(e.target.value)}
-                                        value={newCategory}
-                                        placeholder="Add a new category"
-                                    />
-                                    <Button onClick={saveNewCategory}>Save</Button>
-                                </InputGroup>
+        <>
+            {admin ? (
+                <>
+                    <div className="container mt-5">
+                        <img
+                            height="100"
+                            src="/quill.png"
+                            alt="Quill Logo"
+                            className="bg-danger rounded-circle"
+                        />
+                        <h1>Category Management</h1>
+                        <div className="row justify-content-center">
+                            <div className="col-xs-12 col-sm-8 col-md-6">
+                                <ListGroup>
+                                    {categories.map((category) => (
+                                        <ListGroupItem key={category.id}>
+                                            <Category category={category} delete={deleteCategory} edit={editCategory} />
+                                        </ListGroupItem>
+                                    ))}
+                                </ListGroup>
+                                <div className="my-4">
+                                    <InputGroup>
+                                        <Input
+                                            onChange={(e) => setNewCategory(e.target.value)}
+                                            value={newCategory}
+                                            placeholder="Add a new category"
+                                        />
+                                        <Button onClick={saveNewCategory}>Save</Button>
+                                    </InputGroup>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </>
+                </>
             ) : (
-                    history.push('/') 
-                    )}
-            </>
-  );
+                    history.push('/')
+                )}
+        </>
+    );
 };
 
 export default CategoryManager;

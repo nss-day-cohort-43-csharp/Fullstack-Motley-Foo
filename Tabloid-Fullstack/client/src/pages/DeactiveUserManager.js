@@ -7,6 +7,7 @@ import {
 } from "reactstrap";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import DeactiveUserCard from "../components/DeactiveUserCard"
+import WindowChecker from "../utils/WindowChecker";
 
 const DeactiveUserManager = () => {
   const { isAdmin, getAllDeactiveUserProfiles, users } = useContext(UserProfileContext);
@@ -14,6 +15,7 @@ const DeactiveUserManager = () => {
   const admin = isAdmin();
 
   useEffect(() => {
+    WindowChecker();
     getAllDeactiveUserProfiles();
   }, []);
 

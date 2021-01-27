@@ -13,6 +13,7 @@ import { Button } from 'reactstrap';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { useHistory } from 'react-router-dom';
 import { SubscriptionContext } from '../providers/SubscriptionProvider'
+import WindowChecker from '../utils/WindowChecker';
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -31,6 +32,7 @@ const PostDetails = () => {
 
   const [readTime, setReadTime] = useState();
   useEffect(() => {
+    WindowChecker()
     getToken().then((token) =>
       fetch(`/api/post/${postId}`, {
         method: "GET",
@@ -56,8 +58,8 @@ const PostDetails = () => {
             getSubsByUser();
             setReadTime(data.readTime);
           }
-          if (data.post.isApproved !== 1) {
-            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === true) {
+          if (data.post.isApproved !== true) {
+            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === 1) {
               setPost(data.post);
               setReactionCounts(data.reactionCounts);
               getPostsTags(postId);
@@ -65,7 +67,7 @@ const PostDetails = () => {
               getSubsByUser();
               setReadTime(data.readTime);
             }
-            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === false) {
+            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === 2) {
               toast.error("This isn't the post you're looking for");
             }
           }

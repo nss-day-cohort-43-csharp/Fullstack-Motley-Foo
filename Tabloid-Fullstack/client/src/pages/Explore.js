@@ -3,6 +3,7 @@ import PostList from '../components/PostList';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import TagSearch from "../components/TagSearch"
 import { Container, Col, Row } from "reactstrap"
+import WindowChecker from '../utils/WindowChecker';
 
 
 const Explore = () => {
@@ -10,6 +11,7 @@ const Explore = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    WindowChecker()
     getToken().then((token) => {
       fetch('/api/post', {
         method: 'GET',

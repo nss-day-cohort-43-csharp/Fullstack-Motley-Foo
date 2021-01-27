@@ -4,6 +4,7 @@ import './PostReaction.css';
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import WindowChecker from "../utils/WindowChecker";
 
 const PostReactions = ({ postReactions }) => {
   const { getToken } = useContext(UserProfileContext);
@@ -12,6 +13,7 @@ const PostReactions = ({ postReactions }) => {
   const [reactionCounts, setReactionCounts] = useState(postReactions);
 
   useEffect(() => {
+    WindowChecker();
     refreshReactions()
   }, []);
 
