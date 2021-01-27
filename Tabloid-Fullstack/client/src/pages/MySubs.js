@@ -6,7 +6,6 @@ const MySubs = ({ subs }) => {
     for (const post of sub.providerUserProfile.post) {
       post.authorName = sub.providerUserProfile.displayName
     }
-    console.log(sub)
   }
 
   return (

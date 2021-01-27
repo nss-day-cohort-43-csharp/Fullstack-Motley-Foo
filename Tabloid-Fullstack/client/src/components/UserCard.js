@@ -45,7 +45,6 @@ const UserCard = ({ user, users }) => {
           setPendingChange(false);
 
           loggedInUser.userTypeId = 2
-          console.log(loggedInUser)
           const userToSet = JSON.stringify(loggedInUser)
           localStorage.setItem("userProfile", userToSet)
           history.go("/explore")

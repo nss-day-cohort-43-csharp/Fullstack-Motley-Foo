@@ -228,6 +228,23 @@ const PostDetails = () => {
     }
   };
 
+  const ProfileImage = () => {
+    if (post.userProfile.imageLocation !== null) {
+      return (
+        <img className="profilePic" src={post.userProfile.imageLocation} />
+      );
+    } else {
+      return (
+        <img
+          className="profilePic"
+          src={
+            'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'
+          }
+        />
+      );
+    }
+  };
+
   const TrashCan = () => {
     const user = JSON.parse(localStorage.getItem('userProfile'));
     if (user.id === post.userProfileId) {
@@ -285,7 +302,7 @@ const PostDetails = () => {
     } else {
       return (
         <Button
-          className="btn btn-danger ml-3 circle"
+          className="btn btn-danger ml-3 circle subButton"
           onClick={(e) => addSub(post)}
         >
           Subscribe
@@ -307,6 +324,7 @@ const PostDetails = () => {
         </Button>
       );
     }
+
     if (post.isApproved === true && currentUser.userTypeId === 1) {
       return (
         <Button
@@ -330,8 +348,11 @@ const PostDetails = () => {
         </h1>
         <h5 className="text-danger">{post.category.name}</h5>
         <div className="row">
-          <div className="col">
-            <p className="d-inline-block">{post.userProfile.displayName}</p>
+          <div className="col userProfileInfo">
+            <div className="imgName">
+              {ProfileImage()}
+              {post.userProfile.displayName}
+            </div>
             {subChecker()}
           </div>
           <div className="col">
@@ -342,7 +363,9 @@ const PostDetails = () => {
           </div>
           <div className="col">{readTime}</div>
         </div>
-        <div className="text-justify post-details__content">{post.content}</div>
+        <div className="text-justify post-details__content mt-4">
+          {post.content}
+        </div>
         {userCheck()}
         <div className="tags-container mt-4">
           Tags:
