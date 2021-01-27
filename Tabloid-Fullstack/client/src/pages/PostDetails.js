@@ -13,6 +13,7 @@ import { Button } from 'reactstrap';
 import { UserProfileContext } from '../providers/UserProfileProvider';
 import { useHistory } from 'react-router-dom';
 import { SubscriptionContext } from '../providers/SubscriptionProvider'
+import WindowChecker from '../utils/WindowChecker';
 
 const PostDetails = () => {
   const { postId } = useParams();
@@ -31,6 +32,7 @@ const PostDetails = () => {
 
   const [readTime, setReadTime] = useState();
   useEffect(() => {
+    WindowChecker()
     getToken().then((token) =>
       fetch(`/api/post/${postId}`, {
         method: "GET",
@@ -56,8 +58,8 @@ const PostDetails = () => {
             getSubsByUser();
             setReadTime(data.readTime);
           }
-          if (data.post.isApproved !== 1) {
-            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === true) {
+          if (data.post.isApproved !== true) {
+            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === 1) {
               setPost(data.post);
               setReactionCounts(data.reactionCounts);
               getPostsTags(postId);
@@ -65,7 +67,7 @@ const PostDetails = () => {
               getSubsByUser();
               setReadTime(data.readTime);
             }
-            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === false) {
+            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === 2) {
               toast.error("This isn't the post you're looking for");
             }
           }
@@ -78,9 +80,9 @@ const PostDetails = () => {
   const tagList = () => {
     if (postTags != null && currentUser.id === post.userProfile.id) {
       return postTags.map((postTag) => (
-        <div className="m-4" key={postTag.id}>
+        <div className="ml-4 tagButtonContainer" key={postTag.id}>
           <PostTagCard postTag={postTag} />
-          <Button
+          <Button className="btn btn-danger deleteTag"
             onClick={(e) => {
               deletePostTag(postTag);
             }}
@@ -91,7 +93,7 @@ const PostDetails = () => {
       ));
     } else if (postTags != null) {
       return postTags.map((postTag) => (
-        <div className="m-4" key={postTag.id}>
+        <div className="ml-4" key={postTag.id}>
           <PostTagCard postTag={postTag} />
         </div>
       ));
@@ -131,8 +133,8 @@ const PostDetails = () => {
     if (currentUser.id === post.userProfile.id && dropdownTags) {
       return (
         <fieldset>
-          <div className="form-group">
-            <select defaultValue="" className="form-control" ref={tagToSave}>
+          <div className="form-group dropdown-form">
+            <select defaultValue="" className="form-control col-12 dropdown" ref={tagToSave}>
               <option value="0" className="add-tag">
                 Choose Tag...
               </option>
@@ -144,7 +146,7 @@ const PostDetails = () => {
                   </option>
                 ))}
             </select>
-            <Button onClick={postTagSaver}>add</Button>
+            <Button className="btn btn-success tagAdd" onClick={postTagSaver}>add</Button>
           </div>
         </fieldset>
       );
@@ -209,15 +211,15 @@ const PostDetails = () => {
     if (subs) {
       const userRelationship = subs.filter(sub => sub.providerUserProfileId === post.userProfileId)
       if (userRelationship[0] && userRelationship[0].endDateTime === "9999-12-31T23:59:59.997") {
-        return (<Button onClick={(e) => updateSub(userRelationship[0])}>Unsubscribe</Button>)
+        return (<Button className="btn btn-outline-danger ml-3 circle" onClick={(e) => updateSub(userRelationship[0])}>Unsubscribe</Button>)
       } else if (userRelationship[0]) {
-        return (<Button onClick={((e) => updateSub(userRelationship[0]))}>Subscribe</Button>)
+        return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => updateSub(userRelationship[0]))}>Subscribe</Button>)
       } else {
-        return (<Button onClick={((e) => addSub(post))}>Subscribe</Button>)
+        return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => addSub(post))}>Subscribe</Button>)
       }
     }
     else {
-      return (<Button onClick={((e) => addSub(post))}>Subscribe</Button>)
+      return (<Button className="btn btn-danger ml-3 circle" onClick={((e) => addSub(post))}>Subscribe</Button>)
     }
   }
 
@@ -244,8 +246,10 @@ const PostDetails = () => {
         </div>
         <div className="text-justify post-details__content">{post.content}</div>
         {userCheck()}
-        Tags:
+        <div className="tags-container mt-4">
+          Tags:
         {tagList()}
+        </div>
         <div className="my-4">
           <PostReactions postReactions={reactionCounts} />
         </div>

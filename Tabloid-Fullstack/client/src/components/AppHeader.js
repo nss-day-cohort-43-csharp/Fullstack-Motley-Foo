@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import { SubscriptionContext } from "../providers/SubscriptionProvider"
+import "./AppHeader.css"
 
 const AppHeader = () => {
   const { getCurrentUser, logout, isAdmin } = useContext(UserProfileContext);
@@ -95,7 +96,7 @@ const AppHeader = () => {
                   </>
                 )}
                 <NavItem>
-                  <NavLink onClick={logoutAndReturn}>Logout</NavLink>
+                  <NavLink className="pointer" onClick={logoutAndReturn}>Logout</NavLink>
                 </NavItem>
               </>
             ) : (
