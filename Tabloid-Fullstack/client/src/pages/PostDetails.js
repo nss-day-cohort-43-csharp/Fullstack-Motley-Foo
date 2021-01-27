@@ -48,7 +48,7 @@ const PostDetails = () => {
       .then((data) => {
         if (data !== undefined) {
 
-          if (data.post.isApproved === 1) {
+          if (data.post.isApproved === true) {
             setPost(data.post);
             setReactionCounts(data.reactionCounts);
             getPostsTags(postId);
@@ -57,7 +57,7 @@ const PostDetails = () => {
             setReadTime(data.readTime);
           }
           if (data.post.isApproved !== 1) {
-            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === 1) {
+            if (currentUser.id === data.post.userProfileId || currentUser.userTypeId === true) {
               setPost(data.post);
               setReactionCounts(data.reactionCounts);
               getPostsTags(postId);
