@@ -47,7 +47,7 @@ namespace Tabloid_Fullstack.Repositories
           .Include(p => p.PostReactions)
           .Include(p => p.PostTags)
           .Include(p => p.Comments)
-          .Where(p => p.Id == id && p.IsApproved && p.PublishDateTime < DateTime.Now)
+          .Where(p => p.Id == id && p.PublishDateTime < DateTime.Now)
           .FirstOrDefault();
     }
 
