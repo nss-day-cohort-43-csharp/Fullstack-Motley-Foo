@@ -138,6 +138,13 @@ namespace Tabloid_Fullstack.Controllers
             var posts = _repo.GetHome();
             return Ok(posts);
         }
+        
+        [HttpGet("UnapprovedPosts")]
+        public IActionResult GetUnapprovedPosts()
+        {
+            var posts = _repo.GetUnapprovedPosts();
+            return Ok(posts);
+        }
 
         private UserProfile GetCurrentUserProfile()
         {

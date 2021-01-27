@@ -16,6 +16,7 @@ namespace Tabloid_Fullstack.Repositories
     void Update(Post post);
     List<PostTag> GetByTagId(int tagId);
     List<PostSummary> GetHome();
+    List<PostSummary> GetUnapprovedPosts();
 
   }
 }

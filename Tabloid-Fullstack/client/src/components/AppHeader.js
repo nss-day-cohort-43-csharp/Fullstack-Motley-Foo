@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useState, useContext, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   Collapse,
   Navbar,
@@ -10,9 +10,9 @@ import {
   NavItem,
   NavLink,
   NavbarText,
-} from "reactstrap";
-import { UserProfileContext } from "../providers/UserProfileProvider";
-import { SubscriptionContext } from "../providers/SubscriptionProvider"
+} from 'reactstrap';
+import { UserProfileContext } from '../providers/UserProfileProvider';
+import { SubscriptionContext } from '../providers/SubscriptionProvider';
 
 const AppHeader = () => {
   const { getCurrentUser, logout, isAdmin } = useContext(UserProfileContext);
@@ -25,8 +25,8 @@ const AppHeader = () => {
 
   const logoutAndReturn = () => {
     return logout().then(() => {
-      toast.dark("You are now logged out");
-      history.push("/login");
+      toast.dark('You are now logged out');
+      history.push('/login');
     });
   };
 
@@ -61,7 +61,7 @@ const AppHeader = () => {
                     <NavItem>
                       <NavLink to="/subscriptions" tag={Link}>
                         Subscriptions
-                    </NavLink>
+                      </NavLink>
                     </NavItem>
                   </>
                 )}
@@ -80,17 +80,22 @@ const AppHeader = () => {
                     <NavItem>
                       <NavLink to="/categories" tag={Link}>
                         Categories
-                    </NavLink>
+                      </NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink to="/tags" tag={Link}>
                         Tags
-                    </NavLink>
+                      </NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink to="/users" tag={Link}>
                         Users
-                    </NavLink>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink to="/UnapprovedPosts" tag={Link}>
+                        Unapproved Posts
+                      </NavLink>
                     </NavItem>
                   </>
                 )}
@@ -99,19 +104,19 @@ const AppHeader = () => {
                 </NavItem>
               </>
             ) : (
-                <>
-                  <NavItem>
-                    <NavLink to="/login" tag={Link}>
-                      Login
+              <>
+                <NavItem>
+                  <NavLink to="/login" tag={Link}>
+                    Login
                   </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/register" tag={Link}>
-                      Register
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/register" tag={Link}>
+                    Register
                   </NavLink>
-                  </NavItem>
-                </>
-              )}
+                </NavItem>
+              </>
+            )}
           </Nav>
           {user ? (
             <NavbarText className="d-sm-none d-md-block">
