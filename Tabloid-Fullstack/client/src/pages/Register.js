@@ -80,7 +80,7 @@ const Register = () => {
         </div>
         <h2 className="text-center">User Register</h2>
         <div className="form-group">
-          <div className='defaultImage'>
+          <div className='defaultImageContainer'>
             <img className='defaultImage' src={localStorage.image ? localStorage.image : 'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'} />
           </div>
 

@@ -105,14 +105,14 @@ const PostForm = () => {
                 <form id="newPostForm">
                     <fieldset>
                         <div className="form-group">
-                            <div className='defaultImage'>
+                            <div className='defaultImageContainer'>
                                 <img className='defaultImage' src={localStorage.image ? localStorage.image : 'https://build.dfomer.com/wp-content/uploads/2016/04/dummy-post-horisontal-thegem-blog-default.jpg'} />
                             </div>
                             {imageLoading ? (
                                 <h6 className="loadingImage">Loading...</h6>
                             ) : <></>}
                             <br />
-                            <label htmlFor="embedpollfileinput" className="btn btn-block btn-info">
+                            <label htmlFor="embedpollfileinput" className="btn btn-info">
                                 Upload image
                             </label>
                             <input hidden type="file" onChange={uploadImage} className="inputfile" id="embedpollfileinput" />
