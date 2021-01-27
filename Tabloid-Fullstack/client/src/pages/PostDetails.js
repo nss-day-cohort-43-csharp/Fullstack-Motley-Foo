@@ -65,7 +65,7 @@ const PostDetails = () => {
               getSubsByUser();
               setReadTime(data.readTime);
             }
-            if (currentUser.id !== data.post.userProfileId) {
+            if (currentUser.id !== data.post.userProfileId && currentUser.userTypeId === false) {
               toast.error("This isn't the post you're looking for");
             }
           }
