@@ -21,7 +21,7 @@ namespace Tabloid_Fullstack.Repositories
             return _context.Comment
                 .Include(c => c.UserProfile)
                 .Where(c => c.PostId == id)
-                .OrderBy(c => c.CreateDateTime)
+                .OrderByDescending(c => c.CreateDateTime)
                 .ToList();
         }
 
@@ -33,6 +33,12 @@ namespace Tabloid_Fullstack.Repositories
         public void Add(Comment comment)
         {
             _context.Add(comment);
+            _context.SaveChanges();
+        }
+
+        public void Update(Comment comment)
+        {
+            _context.Entry(comment).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

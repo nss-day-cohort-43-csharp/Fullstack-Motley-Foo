@@ -12,5 +12,8 @@ namespace Tabloid_Fullstack.Repositories
         public void Delete(int id);
 
         public Comment GetByCommentId(int id);
+
+        public void Update(Comment comment);
+
     }
 }

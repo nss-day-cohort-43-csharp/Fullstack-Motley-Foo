@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
-import PostList from "../components/PostList";
+import React, { useContext, useEffect, useState } from 'react';
+import PostList from '../components/PostList';
+import { UserProfileContext } from '../providers/UserProfileProvider';
 
 const Explore = () => {
+  const { getToken } = useContext(UserProfileContext);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("/api/post")
-      .then((res) => res.json())
-      .then((posts) => {
-        setPosts(posts);
-      });
+    getToken().then((token) => {
+      fetch('/api/post', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((posts) => {
+          setPosts(posts);
+        });
+    });
   }, []);
 
   return (
