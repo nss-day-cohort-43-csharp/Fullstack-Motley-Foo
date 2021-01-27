@@ -132,6 +132,25 @@ namespace Tabloid_Fullstack.Controllers
             return NoContent();
         }
 
+        [HttpPut("approval/{id}")]
+        public IActionResult Approval(int id, Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUserProfile();
+
+            if (user.UserTypeId != 1)
+            {
+                return Unauthorized();
+            }
+
+            _repo.Update(post);
+            return NoContent();
+        }
+
         [HttpGet("Home")]
         public IActionResult GetHome()
         {
