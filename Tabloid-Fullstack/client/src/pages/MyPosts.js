@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import PostList from "../components/PostList";
 import './MyPosts.css';
 import { UserProfileContext } from "../providers/UserProfileProvider"
+import WindowChecker from "../utils/WindowChecker";
 
 const MyPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -9,6 +10,7 @@ const MyPosts = () => {
     const user = JSON.parse(localStorage.getItem('userProfile'));
 
     useEffect(() => {
+        WindowChecker()
         getToken().then((token) =>
             fetch(`/api/post/getbyuser/${user.id}`, {
                 method: "GET",

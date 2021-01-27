@@ -19,3 +19,47 @@
   cursor: pointer;
   font-size: larger;
 }
+
+.dropdown {
+  max-width: 10em;
+}
+
+.dropdown-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+.tags-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.deleteTag {
+  padding-top: 0em;
+  padding-bottom: 0em;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: .5em;
+  border-radius: 10rem;
+}
+
+.tagButtonContainer{
+  display: flex;
+  flex-direction: row;
+  border: 1px solid grey;
+  padding: 0.5em;
+  border-radius: 10rem;
+}
+
+.tagAdd{
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.circle{
+  border-radius: 2rem;
+}

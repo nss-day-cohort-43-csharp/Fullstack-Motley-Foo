@@ -7,6 +7,7 @@ import {
 } from "reactstrap";
 import { UserProfileContext } from "../providers/UserProfileProvider";
 import UserCard from "../components/UserCard"
+import WindowChecker from "../utils/WindowChecker";
 
 const UserManager = () => {
   const { isAdmin, getAllUserProfiles, users } = useContext(UserProfileContext);
@@ -14,6 +15,7 @@ const UserManager = () => {
   //const admin = isAdmin();
 
   useEffect(() => {
+    WindowChecker()
     getAllUserProfiles()
   }, []);
 

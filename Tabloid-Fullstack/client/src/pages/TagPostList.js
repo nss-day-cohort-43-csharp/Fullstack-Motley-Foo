@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { PostContext } from "../providers/PostProvider"
 import { useParams } from 'react-router-dom';
 import PostList from "../components/PostList"
+import WindowChecker from "../utils/WindowChecker";
 
 const TagPostList = () => {
   const { posts, getPostsByTagId } = useContext(PostContext);
   const { tagId } = useParams();
 
   useEffect(() => {
+    WindowChecker()
     getPostsByTagId(tagId)
   }, []);
 

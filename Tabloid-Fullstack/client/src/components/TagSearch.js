@@ -2,12 +2,14 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom"
 import { TagContext } from "../providers/TagProvider"
 import { Button } from "reactstrap"
+import WindowChecker from "../utils/WindowChecker";
 
 const TagSearch = () => {
   const { tags, getActiveTags } = useContext(TagContext)
   const history = useHistory();
 
   useEffect(() => {
+    WindowChecker()
     getActiveTags()
   }, []);
 
