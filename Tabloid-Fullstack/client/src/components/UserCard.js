@@ -143,7 +143,7 @@ const UserCard = ({ user, users }) => {
           <Button className="btn btn-outline-danger" onClick={(e) => {
             changeUserType();
             deactivateUser(user);
-            setPendingChange(true)
+            setPendingChange(false)
             Modal.isOpen = { pendingChange }
           }}>Yes, Change</Button>
         </ModalFooter>
